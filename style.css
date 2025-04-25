@@ -62,7 +62,7 @@ body {
     overflow: hidden;
     background-color: var(--card-background);
     display: flex;
-    flex-direction: column; /* Main container stacks its children vertically */
+    flex-direction: column;
     justify-content: space-between;
     position: relative;
     transition: box-shadow var(--animation-duration-fast) ease-in-out;
@@ -124,9 +124,9 @@ body {
 /* --- Main Content Wrapper (remains column for overall flow) --- */
 .content-wrapper {
     display: flex;
-    flex-direction: column; /* Stack children (output/visual and inputs) vertically */
+    flex-direction: column;
     padding: 0 20px 20px 20px;
-    gap: 20px; /* Gap between the output/visual block and the inputs block */
+    gap: 20px;
      z-index: 1;
     position: relative;
     flex-grow: 1;
@@ -137,14 +137,14 @@ body {
     display: flex;
     flex-direction: row; /* Side by side within this section */
     gap: 20px; /* Gap between output and visual */
-    align-items: flex-start; /* Align items to the top */
-    padding-bottom: 20px; /* Add some space below this section */
-    border-bottom: 1px solid var(--border-color); /* Add a separator */
+    align-items: center; /* Align items to the center vertically */
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 
 .output-section {
-    flex: 1; /* Output section takes available space */
+    flex: 1;
     text-align: center;
     min-height: 70px;
     opacity: 0;
@@ -153,9 +153,9 @@ body {
     color: var(--text-color-dark);
      z-index: 1;
     position: relative;
-     padding-top: 0; /* Remove top padding */
-     margin-top: 0; /* Remove top margin */
-     border-top: none; /* Remove top border */
+     padding-top: 0;
+     margin-top: 0;
+     border-top: none;
 }
 
 .output-section.visible {
@@ -190,23 +190,59 @@ body {
 }
 
 .visual-representation {
-    flex: 0 0 120px; /* Fixed width for the visual column */
+    flex: 0 0 250px; /* Increased fixed width for the horizontal visual column */
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    padding-bottom: 0; /* Remove bottom padding */
+    flex-direction: column; /* Stack label, text, and fill container vertically */
+    align-items: flex-start; /* Align items to the start (left) */
+    padding-bottom: 0;
      z-index: 1;
     position: relative;
 }
 
 
+/* --- Value Equivalent Fill Styling (Horizontal) --- */
+.visual-label {
+    font-size: 0.85em;
+    font-weight: bold;
+    color: var(--text-color-dark);
+    margin-bottom: 5px; /* Reduced margin */
+}
+
+.visual-value-text {
+     font-size: 0.9em;
+    color: var(--fill-value-text-color);
+    font-weight: bold;
+     margin-bottom: 5px; /* Reduced margin */
+     min-height: 1.1em;
+}
+
+.fill-container {
+    width: 100%; /* Take full width of its parent (.visual-representation) */
+    height: 20px; /* Reduced height for horizontal bar */
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--fill-background);
+    position: relative;
+    overflow: hidden;
+    display: flex; /* Use flex to position the fill bar */
+    align-items: center; /* Center the fill bar vertically */
+}
+
+.fill-bar {
+    width: 0; /* Start with zero width */
+    height: 100%; /* Fill the height of the container */
+    background: linear-gradient(to right, var(--secondary-color), var(--accent-color)); /* Gradient fill horizontally */
+    transition: width var(--animation-duration-medium) ease-out; /* Animate width change */
+}
+/* --- End Value Equivalent Fill Styling --- */
+
+
 /* --- Calculator Inputs Section --- */
-.calculator-inputs-output { /* This now only contains inputs */
-    flex: 1; /* Allow this section to grow */
+.calculator-inputs-output {
+    flex: 1;
     min-width: 250px;
      animation: fade-in var(--animation-duration-medium) ease-out forwards;
-      padding-top: 20px; /* Add padding at the top */
+      padding-top: 20px;
 }
 
 
@@ -255,7 +291,7 @@ body {
 }
 
 .input-group input[type="number"]:focus,
-.input-group input[type="text"]::placeholder:focus { /* Corrected focus selector for placeholder */
+.input-group input[type="text"]:focus {
     outline: none;
     border-color: var(--accent-color);
     box-shadow: 0 0 8px var(--focus-glow);
@@ -267,43 +303,6 @@ body {
   opacity: 1;
   font-size: 0.9em;
 }
-
-
-/* --- Value Equivalent Fill Styling --- */
-.visual-label {
-    font-size: 0.85em;
-    font-weight: bold;
-    color: var(--text-color-dark);
-    margin-bottom: 8px;
-}
-
-.visual-value-text {
-     font-size: 0.9em;
-    color: var(--fill-value-text-color);
-    font-weight: bold;
-     margin-bottom: 3px;
-     min-height: 1.1em;
-}
-
-.fill-container {
-    width: 70px;
-    height: 150px;
-    border: 2px solid var(--border-color);
-    border-radius: 6px;
-    background-color: var(--fill-background);
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: flex-end;
-}
-
-.fill-bar {
-    width: 100%;
-    height: 0;
-    background: linear-gradient(to top, var(--secondary-color), var(--accent-color));
-    transition: height var(--animation-duration-medium) ease-out;
-}
-/* --- End Value Equivalent Fill Styling --- */
 
 
 .button-container {
@@ -331,12 +330,12 @@ button {
 
 button:hover {
     background-color: var(--button-hover-bg);
-    box-shadow: 5px 10px var(--shadow-color); /* Adjusted shadow on hover */
+    box-shadow: 0 5px 10px var(--shadow-color);
 }
 
 button:active {
     transform: scale(0.98);
-    box-shadow: 1px 3px var(--shadow-color); /* Adjusted shadow on active */
+    box-shadow: 0 1px 3px var(--shadow-color);
 }
 
 .reset-button {
@@ -373,26 +372,28 @@ button:active {
     .output-visual-top {
         flex-direction: column;
         gap: 15px;
-        align-items: center; /* Center items when stacked */
-        padding-bottom: 15px; /* Adjusted padding */
+        align-items: center;
+        padding-bottom: 15px;
     }
 
     .calculator-inputs-output {
         min-width: auto;
-         padding-top: 15px; /* Adjusted padding */
+         padding-top: 15px;
     }
 
     .visual-representation {
         flex: none;
         width: 100%;
-        align-items: center;
+        align-items: center; /* Center items when stacked vertically */
         padding-bottom: 0;
     }
 
+    /* Adjust visual fill container for stacked layout */
     .fill-container {
-        height: 120px;
-        width: 60px;
+        width: 100%; /* Take full width when stacked */
+        height: 20px; /* Keep height for horizontal bar */
     }
+
 
      .visual-label {
         margin-bottom: 5px;
@@ -440,8 +441,13 @@ button:active {
      .disclaimer {
         font-size: 0.75em;
     }
+     /* Fill container width is already 100% in the media query above */
+     .visual-representation {
+         /* Ensure padding doesn't make it too wide on very small screens */
+        padding: 0 10px;
+        box-sizing: border-box;
+     }
      .fill-container {
-        height: 100px;
-        width: 50px;
+         width: 100%; /* Ensure it takes full width minus padding */
      }
 }
