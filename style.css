@@ -17,6 +17,11 @@
     --button-hover-bg: #7b2cd6; /* Slightly darker purple */
     --button-reset-bg: var(--accent-color); /* Use accent color for reset */
     --button-reset-hover-bg: #00aabf; /* Slightly darker accent */
+
+    /* Animation durations */
+    --animation-duration-slow: 0.7s;
+    --animation-duration-medium: 0.5s;
+    --animation-duration-fast: 0.3s;
 }
 
 body {
@@ -24,7 +29,6 @@ body {
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    /* Cool Gradient Background */
     background: linear-gradient(135deg, var(--background-start-color) 0%, var(--background-end-color) 100%);
     color: var(--text-color-dark);
     display: flex;
@@ -33,8 +37,18 @@ body {
     min-height: 100vh;
     padding: 20px;
     box-sizing: border-box;
-    color: var(--text-color-dark); /* Ensure body text is dark */
+    color: var(--text-color-dark);
+    /* Optional: Add a subtle background animation */
+    /* background-size: 200% 200%; */
+    /* animation: gradient-animation 10s ease infinite alternate; */
 }
+
+/* Optional: Keyframe animation for background gradient */
+/* @keyframes gradient-animation {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+} */
+
 
 .container {
     text-align: center;
@@ -45,10 +59,13 @@ body {
     border-radius: 15px;
     overflow: hidden;
     background-color: var(--card-background);
+    display: flex; /* Use flexbox for internal layout */
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .title {
-    color: var(--primary-color); /* Deep Purple title */
+    color: var(--primary-color);
     margin-bottom: 5px;
     font-size: 2.2em;
     font-weight: 700;
@@ -64,12 +81,29 @@ body {
 
 .calculator-content {
     padding: 0 25px 25px 25px;
+    flex-grow: 1; /* Allows content to expand */
 }
 
 .input-group {
     margin-bottom: 20px;
     text-align: left;
+    opacity: 0; /* Start hidden for fade-in animation */
+    transform: translateY(10px); /* Start slightly low */
+    animation: fade-in-up var(--animation-duration-medium) ease-out forwards;
 }
+
+/* Add animation delay for a staggered effect */
+.input-group:nth-child(1) { animation-delay: 0.1s; }
+.input-group:nth-child(2) { animation-delay: 0.2s; }
+.input-group:nth-child(3) { animation-delay: 0.3s; }
+.input-group:nth-child(4) { animation-delay: 0.4s; }
+
+
+@keyframes fade-in-up {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
 
 .input-group label {
     display: block;
@@ -86,7 +120,7 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 8px;
     font-size: 1.1em;
-    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transition: border-color var(--animation-duration-fast) ease-in-out, box-shadow var(--animation-duration-fast) ease-in-out;
     box-sizing: border-box;
     background-color: #f9f9f9;
     color: var(--text-color-dark);
@@ -95,7 +129,7 @@ body {
 .input-group input[type="number"]:focus,
 .input-group input[type="text"]:focus {
     outline: none;
-    border-color: var(--accent-color); /* Use accent color on focus */
+    border-color: var(--accent-color);
     box-shadow: 0 0 10px var(--focus-glow);
     background-color: var(--card-background);
 }
@@ -114,7 +148,7 @@ body {
     min-height: 90px;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    transition: opacity var(--animation-duration-slow) ease-out, transform var(--animation-duration-slow) ease-out;
     color: var(--text-color-dark);
 }
 
@@ -132,28 +166,36 @@ body {
 .output-section .result-number {
     font-size: 3.5em;
     font-weight: 700;
-    color: var(--accent-color); /* Use the vibrant accent color for the number */
+    color: var(--accent-color);
     margin: 10px 0;
     display: block;
-    animation: pulse-scale 0.6s ease-out forwards;
+    animation: pulse-scale var(--animation-duration-medium) ease-out forwards;
 }
 
-.output-section .result-text {
-    font-size: 1.4em;
-    color: var(--text-color-medium);
-    margin-bottom: 5px;
-}
-
+/* Animation for the result number */
 @keyframes pulse-scale {
     0% { transform: scale(0.9); opacity: 0.5; }
     70% { transform: scale(1.05); opacity: 1; }
     100% { transform: scale(1); }
 }
 
+/* Animation for the result text appearing */
+.output-section p {
+    animation: fade-in var(--animation-duration-medium) ease-out forwards;
+}
+
+@keyframes fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+
 .button-container {
     text-align: center;
     margin-top: 20px;
     padding-bottom: 25px;
+    padding-left: 25px; /* Add padding to align with content */
+    padding-right: 25px; /* Add padding to align with content */
 }
 
 button {
@@ -163,7 +205,7 @@ button {
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transition: background-color var(--animation-duration-fast) ease-in-out, box-shadow var(--animation-duration-fast) ease-in-out, transform var(--animation-duration-fast) ease-in-out; /* Add transform for press effect */
     color: var(--button-text-color);
     background-color: var(--button-bg-color);
     box-shadow: 0 4px 10px var(--shadow-color);
@@ -175,14 +217,14 @@ button:hover {
 }
 
 button:active {
-    background-color: #6a040f; /* Darker on press (adjust if needed) */
+    transform: scale(0.98); /* Slightly shrink button on press */
     box-shadow: 0 2px 5px var(--shadow-color);
 }
 
 .reset-button {
     background-color: var(--button-reset-bg);
-    margin-left: 15px;
-    color: var(--text-color-dark); /* Dark text for the accent button */
+    margin-left: 0; /* Remove left margin */
+    color: var(--text-color-dark);
 }
 
 .reset-button:hover {
@@ -190,7 +232,7 @@ button:active {
 }
 
 .reset-button:active {
-    background-color: #008c9e; /* Darker accent on press */
+    background-color: #008c9e;
 }
 
 
@@ -206,11 +248,10 @@ button:active {
     border: 2px solid transparent;
     background-clip: padding-box, border-box;
     background-origin: padding-box, border-box;
-    /* Gradient border using primary and secondary colors */
     background-image: linear-gradient(to right, var(--primary-color), var(--secondary-color)), linear-gradient(to right, var(--primary-color), var(--secondary-color));
 }
 
-/* Media query for smaller screens */
+/* Media Queries for Responsiveness */
 @media (max-width: 600px) {
     .title {
         font-size: 1.8em;
@@ -218,6 +259,32 @@ button:active {
 
     .subtitle {
         font-size: 1em;
+        padding: 0 15px; /* Adjust padding */
+    }
+
+    .calculator-content {
+         padding: 0 15px 15px 15px; /* Adjust padding */
+    }
+
+
+    .input-group {
+        margin-bottom: 15px; /* Reduce space */
+    }
+
+    .input-group label {
+        font-size: 0.9em;
+    }
+
+    .input-group input[type="number"],
+    .input-group input[type="text"] {
+        padding: 10px 12px; /* Adjust padding */
+        font-size: 1em;
+    }
+
+    .output-section {
+        margin-top: 20px;
+        padding-top: 20px;
+        min-height: 80px;
     }
 
     .output-section .result-number {
@@ -232,4 +299,27 @@ button:active {
         padding: 10px 20px;
         font-size: 1em;
     }
+
+     .button-container {
+        padding-left: 15px; /* Adjust padding */
+        padding-right: 15px; /* Adjust padding */
+        padding-bottom: 20px;
+    }
+
+
+    .disclaimer {
+        font-size: 0.8em;
+        margin-top: 20px;
+        padding: 0 15px 15px 15px; /* Adjust padding */
+    }
 }
+
+/* Further breakpoint for very small screens if needed */
+/* @media (max-width: 400px) {
+    .title {
+        font-size: 1.6em;
+    }
+     .output-section .result-number {
+        font-size: 2.5em;
+    }
+} */
