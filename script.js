@@ -5,14 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const itemCostInput = document.getElementById('itemCost');
     const itemNameInput = document.getElementById('itemName');
     const outputSection = document.getElementById('outputSection');
-    const visualRepresentation = document.getElementById('visualRepresentation');
-    const fillBar = document.getElementById('fillBar'); // Get the fill bar element
-    const visualValueText = document.getElementById('visualValueText');
+    // Removed references to visual bar elements: fillBar, visualRepresentation, visualValueText
+    const resetButton = document.getElementById('resetButton');
 
     const allInputs = [thingNameInput, thingCostInput, itemCostInput, itemNameInput];
-
-    // Define a scale for the visual fill bar (e.g., 100 equivalent items = 100% fill)
-    const VISUAL_SCALE_MAX_ITEMS = 100; // Adjust this number based on expected values
 
     // Function to update the item cost input placeholder
     function updateItemCostPlaceholder() {
@@ -34,28 +30,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to update the visual fill animation
-    function updateVisualFill(numberOfItems, itemName) {
-        // Calculate the fill percentage based on the defined scale
-        let fillPercentage = (numberOfItems / VISUAL_SCALE_MAX_ITEMS) * 100;
+    // Function to animate the number counting up
+    function animateNumber(element, targetValue, duration = 500) {
+        const startValue = 0;
+        const startTime = performance.now();
 
-        // Cap the fill at 100% visually, even if the number exceeds the scale max
-        fillPercentage = Math.min(fillPercentage, 100);
+        function updateNumber(currentTime) {
+            const elapsedTime = currentTime - startTime;
+            const progress = Math.min(elapsedTime / duration, 1);
+            const currentValue = startValue + (targetValue - startValue) * progress;
 
-        // Ensure fill is 0 if inputs are invalid or empty
-         if (isNaN(numberOfItems) || numberOfItems < 0 || !isAnyInputFilled()) {
-             fillPercentage = 0;
-         }
+            // Format the number to one decimal place
+            element.textContent = currentValue.toFixed(1);
 
-        // Set the WIDTH of the fill bar to trigger the CSS transition
-        fillBar.style.width = `${fillPercentage}%`;
+            if (progress < 1) {
+                requestAnimationFrame(updateNumber);
+            }
+        }
 
-        // Update the text above the fill bar
-         if (!isNaN(numberOfItems) && numberOfItems >= 0 && isAnyInputFilled()) {
-             visualValueText.textContent = `${numberOfItems.toFixed(1)} ${itemName}${parseFloat(numberOfItems.toFixed(1)) !== 1 ? 's' : ''}`;
-         } else {
-             visualValueText.textContent = ''; // Clear text if no valid calculation
-         }
+        requestAnimationFrame(updateNumber);
     }
 
 
@@ -70,10 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         outputSection.classList.remove('visible');
         outputSection.innerHTML = '';
 
-        // --- Update Visual Fill Based on Inputs (even before full calculation is valid) ---
-        const potentialEquivalentItems = (thingCost / itemCost);
-        updateVisualFill(potentialEquivalentItems, itemName);
-
+        // Removed calls to updateVisualFill
 
         if (isNaN(thingCost) || isNaN(itemCost) || itemCost <= 0 || thingCost < 0 || !isAnyInputFilled()) {
              outputSection.innerHTML = '<p class="placeholder">Enter details above to see the magic!</p>';
@@ -82,6 +72,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const equivalentItems = (thingCost / itemCost);
+
+
+        // --- Create and Add Output Elements with Value Box ---
+        const resultText1 = document.createElement('p');
+        resultText1.classList.add('result-text');
+        resultText1.textContent = `Getting ${thingName} is equivalent to:`;
+
+        // Create the value box container
+        const valueBox = document.createElement('div');
+        valueBox.classList.add('value-box');
+
+        // Create the number element inside the value box
+        const resultNumberSpan = document.createElement('span');
+        resultNumberSpan.classList.add('result-number');
+         // Set initial text to 0 for animation
+        resultNumberSpan.textContent = '0.0';
+
+
+         const resultText2 = document.createElement('p');
+        resultText2.classList.add('result-text');
+        const itemText = `${itemName}${parseFloat(equivalentItems.toFixed(1)) !== 1 ? 's' : ''}`;
+        resultText2.textContent = itemText;
+
+
+        // Append elements to the output section
+        outputSection.appendChild(resultText1);
+        valueBox.appendChild(resultNumberSpan); // Append number span to the box
+        outputSection.appendChild(valueBox); // Append the box to the output section
+        outputSection.appendChild(resultText2);
 
 
         // --- Engaging Element: Dynamic Message Based on Result ---
@@ -96,23 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
              engagingMessage = 'Less than one whole one!';
         }
 
-
-        // Create and add the output elements
-        const resultText1 = document.createElement('p');
-        resultText1.classList.add('result-text');
-        resultText1.textContent = `Getting ${thingName} is equivalent to:`;
-
-        const resultNumber = document.createElement('span');
-        resultNumber.classList.add('result-number');
-         resultNumber.textContent = equivalentItems.toFixed(1);
-
-
-         const resultText2 = document.createElement('p');
-        resultText2.classList.add('result-text');
-        const itemText = `${itemName}${parseFloat(equivalentItems.toFixed(1)) !== 1 ? 's' : ''}`;
-        resultText2.textContent = itemText;
-
-
         // Add the engaging message if it exists
         if (engagingMessage) {
             const messageElement = document.createElement('p');
@@ -121,13 +123,13 @@ document.addEventListener('DOMContentLoaded', () => {
             outputSection.appendChild(messageElement);
         }
 
-        outputSection.appendChild(resultText1);
-        outputSection.appendChild(resultNumber);
-        outputSection.appendChild(resultText2);
-
 
         // Make output visible with animation
-         setTimeout(() => { outputSection.classList.add('visible'); }, 50);
+         setTimeout(() => {
+             outputSection.classList.add('visible');
+             // --- Trigger Number Animation ---
+             animateNumber(resultNumberSpan, equivalentItems); // Animate the number in the box
+         }, 50);
     }
 
     // Function to reset all inputs and output
@@ -145,8 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         outputSection.classList.remove('visible');
          outputSection.innerHTML = '<p class="placeholder">Enter details above to see the magic!</p>';
 
-         // Reset the visual fill bar
-         updateVisualFill(0, '');
+         // Removed call to updateVisualFill
     }
 
 
@@ -167,5 +168,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial updates
     updateItemCostPlaceholder();
     updateCardActiveState();
-    updateVisualFill(0, '');
+    // Removed initial call to updateVisualFill
 });
