@@ -5,10 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const itemCostInput = document.getElementById('itemCost');
     const itemNameInput = document.getElementById('itemName');
     const outputSection = document.getElementById('outputSection');
-    const visualRepresentation = document.getElementById('visualRepresentation'); // Get the visual container
-    const fillBar = document.getElementById('fillBar');
+    const visualRepresentation = document.getElementById('visualRepresentation');
+    const fillBar = document.getElementById('fillBar'); // Get the fill bar element
     const visualValueText = document.getElementById('visualValueText');
-    const resetButton = document.getElementById('resetButton');
 
     const allInputs = [thingNameInput, thingCostInput, itemCostInput, itemNameInput];
 
@@ -48,8 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
              fillPercentage = 0;
          }
 
-        // Set the height of the fill bar to trigger the CSS transition
-        fillBar.style.height = `${fillPercentage}%`;
+        // Set the WIDTH of the fill bar to trigger the CSS transition
+        fillBar.style.width = `${fillPercentage}%`;
 
         // Update the text above the fill bar
          if (!isNaN(numberOfItems) && numberOfItems >= 0 && isAnyInputFilled()) {
@@ -82,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const equivalentItems = (thingCost / itemCost); // Use the non-fixed number for comparisons
+        const equivalentItems = (thingCost / itemCost);
 
 
         // --- Engaging Element: Dynamic Message Based on Result ---
