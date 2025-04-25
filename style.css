@@ -22,6 +22,10 @@
     --animation-duration-slow: 0.7s;
     --animation-duration-medium: 0.5s;
     --animation-duration-fast: 0.3s;
+
+    /* Glow effect colors */
+    --glow-color-start: rgba(0, 188, 212, 0.4); /* Semi-transparent accent color */
+    --glow-color-end: rgba(0, 188, 212, 0); /* Fully transparent accent color */
 }
 
 body {
@@ -38,17 +42,7 @@ body {
     padding: 20px;
     box-sizing: border-box;
     color: var(--text-color-dark);
-    /* Optional: Add a subtle background animation */
-    /* background-size: 200% 200%; */
-    /* animation: gradient-animation 10s ease infinite alternate; */
 }
-
-/* Optional: Keyframe animation for background gradient */
-/* @keyframes gradient-animation {
-    0% { background-position: 0% 0%; }
-    100% { background-position: 100% 100%; }
-} */
-
 
 .container {
     text-align: center;
@@ -59,10 +53,48 @@ body {
     border-radius: 15px;
     overflow: hidden;
     background-color: var(--card-background);
-    display: flex; /* Use flexbox for internal layout */
+    display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative; /* Needed for absolute positioning of pseudo-element glow */
+    transition: box-shadow var(--animation-duration-fast) ease-in-out; /* Smooth transition for shadow if it changes */
 }
+
+/* Remove the old focus-within gradient border */
+.container:focus-within {
+    border: none;
+    background-image: none;
+}
+
+
+/* --- Glow Effect --- */
+.calculator-card::before {
+    content: '';
+    position: absolute;
+    top: -10px; /* Adjust to control glow spread */
+    left: -10px; /* Adjust to control glow spread */
+    right: -10px; /* Adjust to control glow spread */
+    bottom: -10px; /* Adjust to control glow spread */
+    border-radius: 20px; /* Slightly larger than card border-radius */
+    background: radial-gradient(circle, var(--glow-color-start) 0%, var(--glow-color-end) 70%);
+    z-index: -1; /* Position behind the card content */
+    opacity: 0; /* Start hidden */
+    transition: opacity var(--animation-duration-medium) ease-in-out;
+    pointer-events: none; /* Allow clicks to pass through */
+}
+
+.calculator-card.active::before {
+    animation: glow-pulse 1.5s infinite alternate ease-in-out; /* Apply animation when active */
+     opacity: 1; /* Ensure visibility when active */
+}
+
+@keyframes glow-pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.03); opacity: 0.7; } /* Subtle pulse effect */
+    100% { transform: scale(1); opacity: 1; }
+}
+/* --- End Glow Effect --- */
+
 
 .title {
     color: var(--primary-color);
@@ -70,6 +102,8 @@ body {
     font-size: 2.2em;
     font-weight: 700;
     padding-top: 25px;
+    z-index: 1; /* Ensure content is above the glow pseudo-element */
+    position: relative; /* Needed for z-index to work */
 }
 
 .subtitle {
@@ -77,22 +111,27 @@ body {
     margin-bottom: 30px;
     font-size: 1.1em;
     padding: 0 20px;
+    z-index: 1;
+    position: relative;
 }
 
 .calculator-content {
     padding: 0 25px 25px 25px;
-    flex-grow: 1; /* Allows content to expand */
+    flex-grow: 1;
+     z-index: 1;
+    position: relative;
 }
 
 .input-group {
     margin-bottom: 20px;
     text-align: left;
-    opacity: 0; /* Start hidden for fade-in animation */
-    transform: translateY(10px); /* Start slightly low */
+    opacity: 0;
+    transform: translateY(10px);
     animation: fade-in-up var(--animation-duration-medium) ease-out forwards;
+    z-index: 1;
+    position: relative;
 }
 
-/* Add animation delay for a staggered effect */
 .input-group:nth-child(1) { animation-delay: 0.1s; }
 .input-group:nth-child(2) { animation-delay: 0.2s; }
 .input-group:nth-child(3) { animation-delay: 0.3s; }
@@ -150,6 +189,8 @@ body {
     transform: translateY(20px);
     transition: opacity var(--animation-duration-slow) ease-out, transform var(--animation-duration-slow) ease-out;
     color: var(--text-color-dark);
+     z-index: 1;
+    position: relative;
 }
 
 .output-section.visible {
@@ -172,14 +213,12 @@ body {
     animation: pulse-scale var(--animation-duration-medium) ease-out forwards;
 }
 
-/* Animation for the result number */
 @keyframes pulse-scale {
     0% { transform: scale(0.9); opacity: 0.5; }
     70% { transform: scale(1.05); opacity: 1; }
     100% { transform: scale(1); }
 }
 
-/* Animation for the result text appearing */
 .output-section p {
     animation: fade-in var(--animation-duration-medium) ease-out forwards;
 }
@@ -194,8 +233,10 @@ body {
     text-align: center;
     margin-top: 20px;
     padding-bottom: 25px;
-    padding-left: 25px; /* Add padding to align with content */
-    padding-right: 25px; /* Add padding to align with content */
+    padding-left: 25px;
+    padding-right: 25px;
+    z-index: 1;
+    position: relative;
 }
 
 button {
@@ -205,7 +246,7 @@ button {
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color var(--animation-duration-fast) ease-in-out, box-shadow var(--animation-duration-fast) ease-in-out, transform var(--animation-duration-fast) ease-in-out; /* Add transform for press effect */
+    transition: background-color var(--animation-duration-fast) ease-in-out, box-shadow var(--animation-duration-fast) ease-in-out, transform var(--animation-duration-fast) ease-in-out;
     color: var(--button-text-color);
     background-color: var(--button-bg-color);
     box-shadow: 0 4px 10px var(--shadow-color);
@@ -217,13 +258,13 @@ button:hover {
 }
 
 button:active {
-    transform: scale(0.98); /* Slightly shrink button on press */
+    transform: scale(0.98);
     box-shadow: 0 2px 5px var(--shadow-color);
 }
 
 .reset-button {
     background-color: var(--button-reset-bg);
-    margin-left: 0; /* Remove left margin */
+    margin-left: 0;
     color: var(--text-color-dark);
 }
 
@@ -243,15 +284,7 @@ button:active {
     padding: 0 20px 20px 20px;
 }
 
-/* Optional: Add a subtle gradient to the container border on focus-within */
-.container:focus-within {
-    border: 2px solid transparent;
-    background-clip: padding-box, border-box;
-    background-origin: padding-box, border-box;
-    background-image: linear-gradient(to right, var(--primary-color), var(--secondary-color)), linear-gradient(to right, var(--primary-color), var(--secondary-color));
-}
-
-/* Media Queries for Responsiveness */
+/* Media query for smaller screens */
 @media (max-width: 600px) {
     .title {
         font-size: 1.8em;
@@ -259,16 +292,16 @@ button:active {
 
     .subtitle {
         font-size: 1em;
-        padding: 0 15px; /* Adjust padding */
+        padding: 0 15px;
     }
 
     .calculator-content {
-         padding: 0 15px 15px 15px; /* Adjust padding */
+         padding: 0 15px 15px 15px;
     }
 
 
     .input-group {
-        margin-bottom: 15px; /* Reduce space */
+        margin-bottom: 15px;
     }
 
     .input-group label {
@@ -277,7 +310,7 @@ button:active {
 
     .input-group input[type="number"],
     .input-group input[type="text"] {
-        padding: 10px 12px; /* Adjust padding */
+        padding: 10px 12px;
         font-size: 1em;
     }
 
@@ -301,8 +334,8 @@ button:active {
     }
 
      .button-container {
-        padding-left: 15px; /* Adjust padding */
-        padding-right: 15px; /* Adjust padding */
+        padding-left: 15px;
+        padding-right: 15px;
         padding-bottom: 20px;
     }
 
@@ -310,16 +343,6 @@ button:active {
     .disclaimer {
         font-size: 0.8em;
         margin-top: 20px;
-        padding: 0 15px 15px 15px; /* Adjust padding */
+        padding: 0 15px 15px 15px;
     }
 }
-
-/* Further breakpoint for very small screens if needed */
-/* @media (max-width: 400px) {
-    .title {
-        font-size: 1.6em;
-    }
-     .output-section .result-number {
-        font-size: 2.5em;
-    }
-} */
