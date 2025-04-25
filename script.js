@@ -1,17 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const calculatorCard = document.querySelector('.container.calculator-card'); // Use the correct selector
+    const calculatorCard = document.querySelector('.container.calculator-card');
     const thingNameInput = document.getElementById('thingName');
     const thingCostInput = document.getElementById('thingCost');
     const itemCostInput = document.getElementById('itemCost');
     const itemNameInput = document.getElementById('itemName');
     const outputSection = document.getElementById('outputSection');
+    const visualRepresentation = document.getElementById('visualRepresentation'); // Get the visual container
+    const fillBar = document.getElementById('fillBar');
+    const visualValueText = document.getElementById('visualValueText');
     const resetButton = document.getElementById('resetButton');
-    const fillBar = document.getElementById('fillBar'); // Get the fill bar element
-    const visualValueText = document.getElementById('visualValueText'); // Get the text element above the fill bar
 
     const allInputs = [thingNameInput, thingCostInput, itemCostInput, itemNameInput];
 
-     // Define a scale for the visual fill bar (e.g., 100 equivalent items = 100% fill)
+    // Define a scale for the visual fill bar (e.g., 100 equivalent items = 100% fill)
     const VISUAL_SCALE_MAX_ITEMS = 100; // Adjust this number based on expected values
 
     // Function to update the item cost input placeholder
@@ -42,15 +43,19 @@ document.addEventListener('DOMContentLoaded', () => {
         // Cap the fill at 100% visually, even if the number exceeds the scale max
         fillPercentage = Math.min(fillPercentage, 100);
 
+        // Ensure fill is 0 if inputs are invalid or empty
+         if (isNaN(numberOfItems) || numberOfItems < 0 || !isAnyInputFilled()) {
+             fillPercentage = 0;
+         }
+
         // Set the height of the fill bar to trigger the CSS transition
         fillBar.style.height = `${fillPercentage}%`;
 
         // Update the text above the fill bar
-         if (numberOfItems > 0 && isAnyInputFilled()) {
+         if (!isNaN(numberOfItems) && numberOfItems >= 0 && isAnyInputFilled()) {
              visualValueText.textContent = `${numberOfItems.toFixed(1)} ${itemName}${parseFloat(numberOfItems.toFixed(1)) !== 1 ? 's' : ''}`;
          } else {
              visualValueText.textContent = ''; // Clear text if no valid calculation
-              fillBar.style.height = '0%'; // Reset fill bar
          }
     }
 
@@ -68,12 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Update Visual Fill Based on Inputs (even before full calculation is valid) ---
         const potentialEquivalentItems = (thingCost / itemCost);
-         // Only update visual if at least cost inputs have numbers
-        if (!isNaN(thingCost) && !isNaN(itemCost) && itemCost > 0 && thingCost >= 0) {
-             updateVisualFill(potentialEquivalentItems, itemName);
-        } else {
-             updateVisualFill(0, itemName); // Reset visual if inputs are not valid numbers
-        }
+        updateVisualFill(potentialEquivalentItems, itemName);
 
 
         if (isNaN(thingCost) || isNaN(itemCost) || itemCost <= 0 || thingCost < 0 || !isAnyInputFilled()) {
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
          outputSection.innerHTML = '<p class="placeholder">Enter details above to see the magic!</p>';
 
          // Reset the visual fill bar
-         updateVisualFill(0, ''); // Set to 0 and clear item name
+         updateVisualFill(0, '');
     }
 
 
@@ -168,5 +168,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial updates
     updateItemCostPlaceholder();
     updateCardActiveState();
-    updateVisualFill(0, ''); // Ensure visual is reset on load
+    updateVisualFill(0, '');
 });
