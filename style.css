@@ -1,80 +1,118 @@
+:root {
+    /* Cool & Modern Color Palette */
+    --primary-color: #005f73; /* Deep Teal */
+    --secondary-color: #0a9396; /* Vibrant Cyan/Teal */
+    --accent-color: #9b2226; /* A contrasting deep red/burgundy for highlights or errors */
+    --background-color: #e9d8a6; /* Soft sandy background */
+    --card-background: #ffffff; /* White cards */
+    --text-color-dark: #001219; /* Very dark blue-grey */
+    --text-color-medium: #333d29; /* Dark olive-grey */
+    --text-color-light: #76c7c0; /* Lighter teal for subtle text/borders */
+    --border-color: #e0e0e0; /* Light grey border */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    --focus-glow: rgba(0, 95, 115, 0.3); /* Glow based on primary color */
+    --button-bg-color: var(--primary-color);
+    --button-text-color: white;
+    --button-hover-bg: #023e8a; /* Slightly darker blue */
+    --button-reset-bg: #ae2012; /* Reddish for reset */
+    --button-reset-hover-bg: #9b2226; /* Darker red */
+}
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+    font-family: 'Roboto', sans-serif;
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    background-color: #f4f7f6; /* Light background */
-    color: #333;
+    /* Use the soft sandy background */
+    background: var(--background-color); /* Solid background, or keep a subtle gradient if you prefer */
+    color: var(--text-color-dark);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .container {
     text-align: center;
-    padding: 20px;
+    padding: 0;
     max-width: 500px;
-    width: 90%;
+    width: 100%;
+    box-shadow: 0 15px 40px var(--shadow-color); /* Slightly more prominent shadow */
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: var(--card-background);
 }
 
 .title {
-    color: #007bff; /* Accent color */
+    color: var(--primary-color);
     margin-bottom: 5px;
+    font-size: 2.2em; /* Slightly larger title */
+    font-weight: 700;
+    padding-top: 25px; /* More padding */
 }
 
 .subtitle {
-    color: #555;
+    color: var(--text-color-medium);
     margin-bottom: 30px;
+    font-size: 1.1em;
+    padding: 0 20px;
 }
 
-.calculator-card {
-    background-color: #ffffff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    text-align: left;
-    margin-bottom: 20px;
+.calculator-content {
+    padding: 0 25px 25px 25px; /* More padding inside the content area */
 }
 
 .input-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    text-align: left;
 }
 
 .input-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-weight: bold;
-    color: #333;
+    color: var(--text-color-dark);
+    font-size: 0.95em;
 }
 
 .input-group input[type="number"],
 .input-group input[type="text"] {
-    width: calc(100% - 22px); /* Adjust for padding and border */
-    padding: 11px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1em;
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1.1em;
     transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    box-sizing: border-box;
+    background-color: #f9f9f9; /* Slightly off-white input background */
+    color: var(--text-color-dark); /* Ensure input text is dark */
 }
 
 .input-group input[type="number"]:focus,
 .input-group input[type="text"]:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Glow effect on focus */
+    border-color: var(--secondary-color); /* Use secondary color on focus */
+    box-shadow: 0 0 10px var(--focus-glow); /* Softer, wider glow */
+    background-color: var(--card-background);
+}
+
+::placeholder {
+  color: var(--text-color-light);
+  opacity: 1;
 }
 
 .output-section {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #eee; /* Separator */
+    margin-top: 30px; /* More space above output */
+    padding-top: 30px;
+    border-top: 1px solid var(--border-color);
     text-align: center;
-    min-height: 60px; /* Give it some minimum height */
-    opacity: 0; /* Start hidden for animation */
-    transform: translateY(10px); /* Start slightly lower for animation */
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Animation */
+    min-height: 90px; /* More minimum height */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out; /* Slightly slower animation */
+    color: var(--text-color-dark);
 }
 
 .output-section.visible {
@@ -82,34 +120,111 @@ body {
      transform: translateY(0);
 }
 
-
 .output-section .placeholder {
-    color: #777;
+    color: var(--text-color-light);
     font-style: italic;
+    font-size: 1em;
 }
 
 .output-section .result-number {
-    font-size: 2.5em;
-    font-weight: bold;
-    color: #28a745; /* Success color, can be adjusted */
+    font-size: 3.5em; /* Even larger number */
+    font-weight: 700;
+    color: var(--secondary-color); /* Use the vibrant secondary color */
     margin: 10px 0;
-    display: block; /* Ensure it's on its own line */
+    display: block;
+    animation: pulse-scale 0.6s ease-out forwards; /* Slightly longer animation */
 }
 
 .output-section .result-text {
-    font-size: 1.2em;
-    color: #555;
+    font-size: 1.4em; /* Larger text */
+    color: var(--text-color-medium);
+    margin-bottom: 5px;
+}
+
+@keyframes pulse-scale {
+    0% { transform: scale(0.9); opacity: 0.5; }
+    70% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+    padding-bottom: 25px; /* Add padding below buttons */
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    color: var(--button-text-color);
+    background-color: var(--button-bg-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Button shadow */
+}
+
+button:hover {
+    background-color: var(--button-hover-bg);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+    background-color: #012a4a; /* Even darker on press */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.reset-button {
+    background-color: var(--button-reset-bg);
+    margin-left: 15px; /* Space out from other buttons if any */
+}
+
+.reset-button:hover {
+    background-color: var(--button-reset-hover-bg);
+}
+
+.reset-button:active {
+    background-color: #6a040f; /* Darker red on press */
 }
 
 
 .disclaimer {
-    font-size: 0.9em;
-    color: #777;
-    margin-top: 20px;
+    font-size: 0.85em;
+    color: var(--text-color-light);
+    margin-top: 30px;
+    padding: 0 20px 20px 20px; /* Add bottom padding */
 }
 
-/* Optional: Add some simple hover effects */
-.input-group input[type="number"]:hover,
-.input-group input[type="text"]:hover {
-     border-color: #b0b0b0;
+/* Optional: Add a subtle gradient to the container border on focus-within */
+.container:focus-within {
+    border: 2px solid transparent;
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+    background-image: linear-gradient(to right, var(--primary-color), var(--secondary-color)), linear-gradient(to right, var(--primary-color), var(--secondary-color));
+}
+
+/* Media query for smaller screens */
+@media (max-width: 600px) {
+    .title {
+        font-size: 1.8em;
+    }
+
+    .subtitle {
+        font-size: 1em;
+    }
+
+    .output-section .result-number {
+        font-size: 2.8em;
+    }
+
+    .output-section .result-text {
+        font-size: 1.2em;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
 }
