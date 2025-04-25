@@ -24,41 +24,41 @@
     --animation-duration-fast: 0.3s;
 
     /* Glow effect colors */
-    --glow-color-start: rgba(0, 188, 212, 0.4); /* Semi-transparent accent color */
-    --glow-color-end: rgba(0, 188, 212, 0); /* Fully transparent accent color */
+    --glow-color-start: rgba(0, 188, 212, 0.4);
+    --glow-color-end: rgba(0, 188, 212, 0);
 
     /* Fill animation colors */
-    --fill-color: var(--secondary-color); /* Use secondary color for the fill */
-    --fill-background: #eee; /* Light background for the empty part of the fill container */
-    --fill-value-text-color: var(--primary-color); /* Color for the text above the fill bar */
+    --fill-color: var(--secondary-color);
+    --fill-background: #eee;
+    --fill-value-text-color: var(--primary-color);
 
      /* Visual scale - adjust based on typical expected values */
-    --max-equivalent-for-visual: 100; /* What number of items represents 100% fill */
+    --max-equivalent-for-visual: 100;
 }
 
 body {
     font-family: 'Roboto', sans-serif;
-    line-height: 1.6;
+    line-height: 1.5; /* Slightly reduced line height */
     margin: 0;
-    padding: 0;
+    padding: 10px; /* Reduced padding */
     background: linear-gradient(135deg, var(--background-start-color) 0%, var(--background-end-color) 100%);
     color: var(--text-color-dark);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 20px;
     box-sizing: border-box;
     color: var(--text-color-dark);
+    overflow-y: auto; /* Allow scrolling if content still exceeds viewport, but try to avoid it */
 }
 
 .container.calculator-card {
     text-align: center;
     padding: 0;
-    max-width: 800px; /* Increased max width for side-by-side */
+    max-width: 800px;
     width: 100%;
-    box-shadow: 0 15px 40px var(--shadow-color);
-    border-radius: 15px;
+    box-shadow: 0 10px 30px var(--shadow-color); /* Slightly reduced shadow */
+    border-radius: 10px; /* Slightly less rounded corners */
     overflow: hidden;
     background-color: var(--card-background);
     display: flex;
@@ -77,11 +77,11 @@ body {
 .container.calculator-card::before {
     content: '';
     position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
-    border-radius: 20px;
+    top: -5px; /* Reduced glow spread */
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 15px; /* Adjusted border-radius */
     background: radial-gradient(circle, var(--glow-color-start) 0%, var(--glow-color-end) 70%);
     z-index: -1;
     opacity: 0;
@@ -96,27 +96,27 @@ body {
 
 @keyframes glow-pulse {
     0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.03); opacity: 0.7; }
-    100% { transform: scale(1); }
+    50% { transform: scale(1.01); opacity: 0.8; } /* More subtle pulse */
+    100% { transform: scale(1); opacity: 1; }
 }
 /* --- End Glow Effect --- */
 
 
 .title {
     color: var(--primary-color);
-    margin-bottom: 5px;
-    font-size: 2.2em;
+    margin-bottom: 3px; /* Reduced margin */
+    font-size: 2em; /* Slightly reduced font size */
     font-weight: 700;
-    padding-top: 25px;
+    padding-top: 20px; /* Reduced padding */
     z-index: 1;
     position: relative;
 }
 
 .subtitle {
     color: var(--text-color-medium);
-    margin-bottom: 30px;
-    font-size: 1.1em;
-    padding: 0 20px;
+    margin-bottom: 20px; /* Reduced margin */
+    font-size: 1em; /* Slightly reduced font size */
+    padding: 0 15px; /* Reduced padding */
     z-index: 1;
     position: relative;
 }
@@ -124,30 +124,29 @@ body {
 /* --- Side-by-Side Layout --- */
 .content-wrapper {
     display: flex;
-    flex-direction: row; /* Side by side on larger screens */
-    padding: 0 25px 25px 25px; /* Padding around the two columns */
-    gap: 30px; /* Space between the two columns */
+    flex-direction: row;
+    padding: 0 20px 20px 20px; /* Reduced padding */
+    gap: 20px; /* Reduced gap */
      z-index: 1;
     position: relative;
+    flex-grow: 1; /* Allow content to grow */
 }
 
 .calculator-inputs-output {
-    flex: 1; /* Allow this section to grow */
-    min-width: 280px; /* Ensure minimum width */
-     /* Animation delay for the whole section */
-    animation: fade-in var(--animation-duration-medium) ease-out forwards;
+    flex: 1;
+    min-width: 250px; /* Reduced min-width */
+     animation: fade-in var(--animation-duration-medium) ease-out forwards;
 }
 
 .visual-representation {
-    flex: 0 0 150px; /* Fixed width for the visual column */
+    flex: 0 0 120px; /* Reduced fixed width for visual column */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end; /* Align items to the bottom */
-    padding-bottom: 20px; /* Add some padding at the bottom */
-     /* Animation delay for the whole section */
+    justify-content: flex-end;
+    padding-bottom: 10px; /* Reduced padding */
      animation: fade-in var(--animation-duration-medium) ease-out forwards;
-     animation-delay: 0.2s; /* Stagger animation */
+     animation-delay: 0.2s;
 }
 
 @keyframes fade-in {
@@ -157,7 +156,7 @@ body {
 
 
 .input-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px; /* Reduced margin */
     text-align: left;
     opacity: 0;
     transform: translateY(10px);
@@ -166,7 +165,7 @@ body {
     position: relative;
 }
 
-/* Add animation delay for a staggered effect (adjust total number if more inputs added) */
+/* Adjust animation delay for a staggered effect */
 .calculator-inputs-output .input-group:nth-child(1) { animation-delay: 0.1s; }
 .calculator-inputs-output .input-group:nth-child(2) { animation-delay: 0.2s; }
 .calculator-inputs-output .input-group:nth-child(3) { animation-delay: 0.3s; }
@@ -181,19 +180,19 @@ body {
 
 .input-group label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 5px; /* Reduced margin */
     font-weight: bold;
     color: var(--text-color-dark);
-    font-size: 0.95em;
+    font-size: 0.9em; /* Slightly reduced font size */
 }
 
 .input-group input[type="number"],
 .input-group input[type="text"] {
     width: 100%;
-    padding: 12px 15px;
+    padding: 10px 12px; /* Reduced padding */
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 1.1em;
+    border-radius: 6px; /* Slightly less rounded */
+    font-size: 1em; /* Slightly reduced font size */
     transition: border-color var(--animation-duration-fast) ease-in-out, box-shadow var(--animation-duration-fast) ease-in-out;
     box-sizing: border-box;
     background-color: #f9f9f9;
@@ -204,25 +203,26 @@ body {
 .input-group input[type="text"]:focus {
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 10px var(--focus-glow);
+    box-shadow: 0 0 8px var(--focus-glow); /* Slightly reduced glow */
     background-color: var(--card-background);
 }
 
 ::placeholder {
   color: var(--text-color-light);
   opacity: 1;
+  font-size: 0.9em; /* Slightly reduced placeholder font size */
 }
 
 
 .output-section {
-    margin-top: 30px;
-    padding-top: 30px;
+    margin-top: 20px; /* Reduced margin */
+    padding-top: 20px; /* Reduced padding */
     border-top: 1px solid var(--border-color);
     text-align: center;
-    min-height: 90px;
+    min-height: 70px; /* Reduced min height */
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity var(--animation-duration-slow) ease-out, transform var(--animation-duration-slow) ease-out;
+    transform: translateY(10px); /* Reduced initial translation */
+    transition: opacity var(--animation-duration-medium) ease-out, transform var(--animation-duration-medium) ease-out; /* Adjusted transition */
     color: var(--text-color-dark);
      z-index: 1;
     position: relative;
@@ -236,101 +236,102 @@ body {
 .output-section .placeholder {
     color: var(--text-color-light);
     font-style: italic;
-    font-size: 1em;
+    font-size: 0.9em; /* Reduced font size */
 }
 
 .output-section .result-number {
-    font-size: 3.5em;
+    font-size: 3em; /* Reduced font size */
     font-weight: 700;
     color: var(--accent-color);
-    margin: 10px 0;
+    margin: 8px 0; /* Reduced margin */
     display: block;
     animation: pulse-scale var(--animation-duration-medium) ease-out forwards;
 }
 
 @keyframes pulse-scale {
-    0% { transform: scale(0.9); opacity: 0.5; }
-    70% { transform: scale(1.05); opacity: 1; }
+    0% { transform: scale(0.95); opacity: 0.7; } /* Adjusted pulse scale */
+    70% { transform: scale(1.02); opacity: 1; }
     100% { transform: scale(1); }
 }
 
 .output-section p {
     animation: fade-in var(--animation-duration-medium) ease-out forwards;
+    font-size: 1.1em; /* Slightly reduced font size */
 }
 
 /* --- Value Equivalent Fill Styling --- */
 .visual-label {
-    font-size: 0.95em;
+    font-size: 0.85em; /* Reduced font size */
     font-weight: bold;
     color: var(--text-color-dark);
-    margin-bottom: 10px;
+    margin-bottom: 8px; /* Reduced margin */
 }
 
 .visual-value-text {
-     font-size: 1em;
-    color: var(--fill-value-text-color); /* Use primary color for this text */
+     font-size: 0.9em; /* Reduced font size */
+    color: var(--fill-value-text-color);
     font-weight: bold;
-     margin-bottom: 5px;
-     min-height: 1.2em; /* Reserve space to prevent layout shifts */
+     margin-bottom: 3px; /* Reduced margin */
+     min-height: 1.1em; /* Adjusted min height */
 }
 
 .fill-container {
-    width: 80px; /* Width of the fill container */
-    height: 200px; /* Height of the fill container */
+    width: 70px; /* Reduced width */
+    height: 150px; /* Reduced height */
     border: 2px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 6px; /* Slightly less rounded */
     background-color: var(--fill-background);
-    position: relative; /* Needed for absolute positioning of fill bar */
-    overflow: hidden; /* Hide the fill bar outside the container */
-    display: flex; /* Use flex to position the fill bar at the bottom */
-    align-items: flex-end; /* Align fill bar to the bottom */
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
 }
 
 .fill-bar {
-    width: 100%; /* Fill the width of the container */
-    height: 0; /* Start with zero height */
-    background: linear-gradient(to top, var(--secondary-color), var(--accent-color)); /* Gradient fill */
-    transition: height var(--animation-duration-slow) ease-out; /* Animate height change */
+    width: 100%;
+    height: 0;
+    background: linear-gradient(to top, var(--secondary-color), var(--accent-color));
+    transition: height var(--animation-duration-medium) ease-out; /* Adjusted transition */
 }
 /* --- End Value Equivalent Fill Styling --- */
 
 
 .button-container {
     text-align: center;
-    margin-top: 20px;
-    padding-bottom: 25px;
-    padding-left: 25px;
-    padding-right: 25px;
+    margin-top: 15px; /* Reduced margin */
+    padding-bottom: 20px; /* Reduced padding */
+    padding-left: 20px; /* Reduced padding */
+    padding-right: 20px; /* Reduced padding */
     z-index: 1;
     position: relative;
 }
 
 button {
-    padding: 12px 25px;
-    font-size: 1.1em;
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 1em; /* Reduced font size */
     font-weight: bold;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px; /* Slightly less rounded */
     cursor: pointer;
     transition: background-color var(--animation-duration-fast) ease-in-out, box-shadow var(--animation-duration-fast) ease-in-out, transform var(--animation-duration-fast) ease-in-out;
     color: var(--button-text-color);
     background-color: var(--button-bg-color);
-    box-shadow: 0 4px 10px var(--shadow-color);
+    box-shadow: 0 3px 8px var(--shadow-color); /* Reduced shadow */
 }
 
 button:hover {
     background-color: var(--button-hover-bg);
-    box-shadow: 0 6px 12px var(--shadow-color);
+    box-shadow: 0 5px 10px var(--shadow-color); /* Reduced shadow */
 }
 
 button:active {
     transform: scale(0.98);
-    box-shadow: 0 2px 5px var(--shadow-color);
+    box-shadow: 0 1px 3px var(--shadow-color); /* Reduced shadow */
 }
 
 .reset-button {
     background-color: var(--button-reset-bg);
-    margin-left: 0;
+    margin-left: 0; /* Kept at 0 as there's only one button now */
     color: var(--text-color-dark);
 }
 
@@ -344,111 +345,84 @@ button:active {
 
 
 .disclaimer {
-    font-size: 0.85em;
+    font-size: 0.8em; /* Reduced font size */
     color: var(--text-color-light);
-    margin-top: 30px;
-    padding: 0 20px 20px 20px;
+    margin-top: 20px; /* Reduced margin */
+    padding: 0 15px 15px 15px; /* Reduced padding */
 }
 
 /* Media Query for Responsiveness - Stack columns on smaller screens */
-@media (max-width: 768px) { /* Adjust breakpoint as needed */
+@media (max-width: 700px) { /* Adjusted breakpoint slightly */
     .content-wrapper {
-        flex-direction: column; /* Stack columns vertically */
-        gap: 20px; /* Adjust gap */
-        padding: 0 20px 20px 20px;
+        flex-direction: column;
+        gap: 15px; /* Reduced gap */
+        padding: 0 15px 15px 15px; /* Reduced padding */
     }
 
     .calculator-inputs-output {
-        min-width: auto; /* Remove min-width constraint */
+        min-width: auto;
     }
 
     .visual-representation {
-        flex: none; /* Remove flex properties */
-        width: 100%; /* Take full width */
-        align-items: center; /* Center content */
-        padding-bottom: 0; /* Remove bottom padding */
+        flex: none;
+        width: 100%;
+        align-items: center;
+        padding-bottom: 0;
     }
 
     .fill-container {
-        height: 150px; /* Adjust height on smaller screens */
+        height: 120px; /* Reduced height on smaller screens */
+        width: 60px; /* Adjusted width */
     }
+
+     .visual-label {
+        margin-bottom: 5px;
+     }
+
+     .visual-value-text {
+        margin-bottom: 2px;
+     }
 
      /* Adjust input group animation delay for stacked layout */
      .calculator-inputs-output .input-group:nth-child(1) { animation-delay: 0.1s; }
     .calculator-inputs-output .input-group:nth-child(2) { animation-delay: 0.2s; }
     .calculator-inputs-output .input-group:nth-child(3) { animation-delay: 0.3s; }
     .calculator-inputs-output .input-group:nth-child(4) { animation-delay: 0.4s; }
-     /* Ensure animation delays are sequential for all input groups */
 }
 
-
-@media (max-width: 600px) {
+@media (max-width: 500px) { /* Added breakpoint for even smaller screens */
     .title {
-        font-size: 1.8em;
+        font-size: 1.6em;
     }
-
     .subtitle {
-        font-size: 1em;
-        padding: 0 15px;
-    }
-
-    .content-wrapper {
-         padding: 0 15px 15px 15px; /* Adjust padding */
-    }
-
-
-    .input-group {
-        margin-bottom: 15px;
-    }
-
-    .input-group label {
         font-size: 0.9em;
     }
-
-    .input-group input[type="number"],
+     .input-group label {
+        font-size: 0.85em;
+    }
+     .input-group input[type="number"],
     .input-group input[type="text"] {
-        padding: 10px 12px;
-        font-size: 1em;
+        padding: 8px 10px;
+        font-size: 0.9em;
     }
-
-    .output-section {
-        margin-top: 20px;
-        padding-top: 20px;
-        min-height: 80px;
+    ::placeholder {
+        font-size: 0.85em;
     }
-
-    .output-section .result-number {
-        font-size: 2.8em;
+     .output-section .result-number {
+        font-size: 2.5em;
     }
-
     .output-section .result-text {
-        font-size: 1.2em;
+        font-size: 1.1em;
     }
-
-    button {
-        padding: 10px 20px;
-        font-size: 1em;
+     button {
+        padding: 8px 15px;
+        font-size: 0.9em;
     }
-
-     .button-container {
-        padding-left: 15px;
-        padding-right: 15px;
-        padding-bottom: 20px;
+     .disclaimer {
+        font-size: 0.75em;
     }
-
-
-    .disclaimer {
-        font-size: 0.8em;
-        margin-top: 20px;
-        padding: 0 15px 15px 15px;
-    }
-
      .fill-container {
-        width: 60px; /* Adjust width on smaller screens */
-     }
-}
-
-     .fill-container {
-        width: 60px; /* Adjust width on smaller screens */
+        height: 100px; /* Further reduce height */
+        width: 50px; /* Further reduce width */
      }
 }
