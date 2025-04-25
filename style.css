@@ -27,13 +27,12 @@
     --glow-color-start: rgba(0, 188, 212, 0.4);
     --glow-color-end: rgba(0, 188, 212, 0);
 
-    /* Fill animation colors */
-    --fill-color: var(--secondary-color);
-    --fill-background: #eee;
-    --fill-value-text-color: var(--primary-color);
+    /* Value Box styling */
+    --value-box-background: var(--background-color); /* Use background color for box background */
+    --value-box-border: 2px solid var(--accent-color); /* Accent color border */
+    --value-box-text-color: var(--primary-color); /* Deep purple text color */
+    --value-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
 
-     /* Visual scale - adjust based on typical expected values */
-    --max-equivalent-for-visual: 100;
 }
 
 body {
@@ -55,7 +54,7 @@ body {
 .container.calculator-card {
     text-align: center;
     padding: 0;
-    max-width: 800px;
+    max-width: 500px; /* Reverted max width as side-by-side visual is gone */
     width: 100%;
     box-shadow: 0 10px 30px var(--shadow-color);
     border-radius: 10px;
@@ -132,21 +131,10 @@ body {
     flex-grow: 1;
 }
 
-/* --- Top section for Output and Visual (Side-by-Side) --- */
-.output-visual-top {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    align-items: center;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-
+/* --- Output Section with Value Box --- */
 .output-section {
-    flex: 1;
     text-align: center;
-    min-height: 70px;
+    min-height: 120px; /* Increased min height to accommodate value box */
     opacity: 0;
     transform: translateY(10px);
     transition: opacity var(--animation-duration-medium) ease-out, transform var(--animation-duration-medium) ease-out;
@@ -156,6 +144,10 @@ body {
      padding-top: 0;
      margin-top: 0;
      border-top: none;
+     display: flex; /* Use flexbox to arrange elements inside output */
+     flex-direction: column;
+     align-items: center;
+     justify-content: center; /* Center content vertically */
 }
 
 .output-section.visible {
@@ -169,77 +161,42 @@ body {
     font-size: 0.9em;
 }
 
+/* --- Value Box Styling --- */
+.value-box {
+    background-color: var(--value-box-background);
+    border: var(--value-box-border);
+    border-radius: 8px;
+    padding: 15px 25px; /* Padding inside the box */
+    margin-bottom: 10px; /* Space below the box */
+    box-shadow: var(--value-box-shadow);
+    display: inline-block; /* Allow box to size based on content */
+}
+
 .output-section .result-number {
-    font-size: 3em;
+    font-size: 3em; /* Reduced font size to fit in box better */
     font-weight: 700;
-    color: var(--accent-color);
-    margin: 8px 0;
+    color: var(--value-box-text-color); /* Use value box text color */
+    margin: 0; /* Remove margin to control spacing with padding */
     display: block;
-    animation: pulse-scale var(--animation-duration-medium) ease-out forwards;
+    /* Removed pulse-scale animation from here, will handle number animation in JS */
 }
 
-@keyframes pulse-scale {
-    0% { transform: scale(0.95); opacity: 0.7; }
-    70% { transform: scale(1.02); opacity: 1; }
-    100% { transform: scale(1); }
-}
-
-.output-section p {
+.output-section .result-text {
     animation: fade-in var(--animation-duration-medium) ease-out forwards;
     font-size: 1.1em;
+    margin-bottom: 5px; /* Space below the main result text */
 }
 
-.visual-representation {
-    flex: 0 0 250px; /* Keep wider width for horizontal bar */
-    display: flex;
-    flex-direction: column; /* Stack label, text, and fill container vertically */
-    align-items: flex-start; /* Align items to the start (left) */
-    padding-bottom: 0;
-     z-index: 1;
-    position: relative;
+/* Style for the engaging message */
+.output-section .engaging-message {
+    font-size: 0.9em; /* Smaller for engaging message */
+    color: var(--text-color-medium);
+    margin-top: 5px;
 }
-
-
-/* --- Value Equivalent Fill Styling (Horizontal - Corrected) --- */
-.visual-label {
-    font-size: 0.85em;
-    font-weight: bold;
-    color: var(--text-color-dark);
-    margin-bottom: 5px;
-}
-
-.visual-value-text {
-     font-size: 0.9em;
-    color: var(--fill-value-text-color);
-    font-weight: bold;
-     margin-bottom: 5px; /* Ensure space below text */
-     min-height: 1.1em;
-}
-
-.fill-container {
-    width: 100%; /* Take full width of its parent (.visual-representation) */
-    height: 20px; /* Height of the horizontal bar */
-    border: 2px solid var(--border-color);
-    border-radius: 6px;
-    background-color: var(--fill-background);
-    position: relative;
-    overflow: hidden;
-    display: flex; /* Use flex to position the fill bar within the container */
-    align-items: center; /* Vertically center the fill bar */
-     justify-content: flex-start; /* Ensure the fill bar starts from the left */
-}
-
-.fill-bar {
-    width: 0; /* Start with zero width */
-    height: 100%; /* Fill the height of the container */
-    background: linear-gradient(to right, var(--secondary-color), var(--accent-color)); /* Gradient fill horizontally */
-    transition: width var(--animation-duration-medium) ease-out; /* Animate width change */
-}
-/* --- End Value Equivalent Fill Styling --- */
 
 
 /* --- Calculator Inputs Section --- */
-.calculator-inputs-output {
+.calculator-inputs { /* Class name changed */
     flex: 1;
     min-width: 250px;
      animation: fade-in var(--animation-duration-medium) ease-out forwards;
@@ -258,10 +215,10 @@ body {
 }
 
 /* Adjust animation delay for a staggered effect */
-.calculator-inputs-output .input-group:nth-child(1) { animation-delay: 0.1s; }
-.calculator-inputs-output .input-group:nth-child(2) { animation-delay: 0.2s; }
-.calculator-inputs-output .input-group:nth-child(3) { animation-delay: 0.3s; }
-.calculator-inputs-output .input-group:nth-child(4) { animation-delay: 0.4s; }
+.calculator-inputs .input-group:nth-child(1) { animation-delay: 0.1s; }
+.calculator-inputs .input-group:nth-child(2) { animation-delay: 0.2s; }
+.calculator-inputs .input-group:nth-child(3) { animation-delay: 0.3s; }
+.calculator-inputs .input-group:nth-child(4) { animation-delay: 0.4s; }
 
 
 @keyframes fade-in-up {
@@ -292,7 +249,7 @@ body {
 }
 
 .input-group input[type="number"]:focus,
-.input-group input[type="text"]:focus { /* Corrected focus selector */
+.input-group input[type="text"]:focus {
     outline: none;
     border-color: var(--accent-color);
     box-shadow: 0 0 8px var(--focus-glow);
@@ -361,54 +318,30 @@ button:active {
     padding: 0 15px 15px 15px;
 }
 
-/* Media Query for Responsiveness - Stack columns on smaller screens */
+/* Media Query for smaller screens */
 @media (max-width: 700px) {
+    /* Removed media query rule that set flex-direction: column on output-visual-top */
+    /* as output-visual-top is removed */
+
     .content-wrapper {
-        flex-direction: column;
         gap: 15px;
         padding: 0 15px 15px 15px;
     }
 
-     /* Stack output and visual vertically on smaller screens */
-    .output-visual-top {
-        flex-direction: column;
-        gap: 15px;
-        align-items: center;
-        padding-bottom: 15px;
-    }
-
-    .calculator-inputs-output {
+     .calculator-inputs { /* Class name changed */
         min-width: auto;
          padding-top: 15px;
     }
 
-    .visual-representation {
-        flex: none;
-        width: 100%; /* Take full width when stacked */
-        align-items: center; /* Center items when stacked vertically */
-        padding-bottom: 0;
+    .output-section {
+        min-height: 100px; /* Adjust min height */
     }
 
-    /* Adjust visual fill container for stacked layout */
-    .fill-container {
-        width: 90%; /* Allow some padding */
-        height: 20px; /* Keep height for horizontal bar */
-    }
-
-
-     .visual-label {
-        margin-bottom: 5px;
-     }
-
-     .visual-value-text {
-        margin-bottom: 2px;
-     }
-
-     /* Adjust input group animation delay for staggered effect */
-     .calculator-inputs-output .input-group:nth-child(1) { animation-delay: 0.1s; }
-    .calculator-inputs-output .input-group:nth-child(2) { animation-delay: 0.2s; }
-    .calculator-inputs-output .input-group:nth-child(3) { animation-delay: 0.3s; }
-    .calculator-inputs-output .input-group:nth-child(4) { animation-delay: 0.4s; }
+    /* Adjust input group animation delay for stacked layout */
+     .calculator-inputs .input-group:nth-child(1) { animation-delay: 0.1s; }
+    .calculator-inputs .input-group:nth-child(2) { animation-delay: 0.2s; }
+    .calculator-inputs .input-group:nth-child(3) { animation-delay: 0.3s; }
+    .calculator-inputs .input-group:nth-child(4) { animation-delay: 0.4s; }
 }
 
 @media (max-width: 500px) {
@@ -442,10 +375,4 @@ button:active {
      .disclaimer {
         font-size: 0.75em;
     }
-     .visual-representation {
-        padding: 0 5px; /* Further reduced padding */
-     }
-     .fill-container {
-         width: 100%;
-     }
 }
