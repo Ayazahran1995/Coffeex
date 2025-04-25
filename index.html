@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatable Math Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Relatable Math</h1>
+        <p class="subtitle">See what that purchase is really worth in everyday items!</p>
+
+        <div class="calculator-card">
+            <div class="input-group">
+                <label for="thingCost">Cost of the Thing I Want ($):</label>
+                <input type="number" id="thingCost" placeholder="e.g., 150" min="0">
+            </div>
+
+            <div class="input-group">
+                <label for="itemName">Name of the Everyday Item:</label>
+                <input type="text" id="itemName" placeholder="e.g., Latte">
+            </div>
+
+            <div class="input-group">
+                <label for="itemCost">Average Cost of One Item ($):</label>
+                <input type="number" id="itemCost" placeholder="e.g., 3.50" min="0">
+            </div>
+
+            <div class="output-section" id="outputSection">
+                <p class="placeholder">Enter values above to see the magic!</p>
+            </div>
+        </div>
+
+        <p class="disclaimer">
+            This is a fun way to visualize costs! It's about making choices that are right for you and doesn't promote overconsumption of any item.
+        </p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
