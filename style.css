@@ -38,9 +38,9 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    line-height: 1.5; /* Slightly reduced line height */
+    line-height: 1.5;
     margin: 0;
-    padding: 10px; /* Reduced padding */
+    padding: 10px;
     background: linear-gradient(135deg, var(--background-start-color) 0%, var(--background-end-color) 100%);
     color: var(--text-color-dark);
     display: flex;
@@ -49,7 +49,7 @@ body {
     min-height: 100vh;
     box-sizing: border-box;
     color: var(--text-color-dark);
-    overflow-y: auto; /* Allow scrolling if content still exceeds viewport, but try to avoid it */
+    overflow-y: auto;
 }
 
 .container.calculator-card {
@@ -57,12 +57,12 @@ body {
     padding: 0;
     max-width: 800px;
     width: 100%;
-    box-shadow: 0 10px 30px var(--shadow-color); /* Slightly reduced shadow */
-    border-radius: 10px; /* Slightly less rounded corners */
+    box-shadow: 0 10px 30px var(--shadow-color);
+    border-radius: 10px;
     overflow: hidden;
     background-color: var(--card-background);
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Main container stacks its children vertically */
     justify-content: space-between;
     position: relative;
     transition: box-shadow var(--animation-duration-fast) ease-in-out;
@@ -77,11 +77,11 @@ body {
 .container.calculator-card::before {
     content: '';
     position: absolute;
-    top: -5px; /* Reduced glow spread */
+    top: -5px;
     left: -5px;
     right: -5px;
     bottom: -5px;
-    border-radius: 15px; /* Adjusted border-radius */
+    border-radius: 15px;
     background: radial-gradient(circle, var(--glow-color-start) 0%, var(--glow-color-end) 70%);
     z-index: -1;
     opacity: 0;
@@ -96,67 +96,122 @@ body {
 
 @keyframes glow-pulse {
     0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.01); opacity: 0.8; } /* More subtle pulse */
-    100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.01); opacity: 0.8; }
+    100% { transform: scale(1); }
 }
 /* --- End Glow Effect --- */
 
 
 .title {
     color: var(--primary-color);
-    margin-bottom: 3px; /* Reduced margin */
-    font-size: 2em; /* Slightly reduced font size */
+    margin-bottom: 3px;
+    font-size: 2em;
     font-weight: 700;
-    padding-top: 20px; /* Reduced padding */
+    padding-top: 20px;
     z-index: 1;
     position: relative;
 }
 
 .subtitle {
     color: var(--text-color-medium);
-    margin-bottom: 20px; /* Reduced margin */
-    font-size: 1em; /* Slightly reduced font size */
-    padding: 0 15px; /* Reduced padding */
+    margin-bottom: 20px;
+    font-size: 1em;
+    padding: 0 15px;
     z-index: 1;
     position: relative;
 }
 
-/* --- Side-by-Side Layout --- */
+/* --- Main Content Wrapper (remains column for overall flow) --- */
 .content-wrapper {
     display: flex;
-    flex-direction: row;
-    padding: 0 20px 20px 20px; /* Reduced padding */
-    gap: 20px; /* Reduced gap */
+    flex-direction: column; /* Stack children (output/visual and inputs) vertically */
+    padding: 0 20px 20px 20px;
+    gap: 20px; /* Gap between the output/visual block and the inputs block */
      z-index: 1;
     position: relative;
-    flex-grow: 1; /* Allow content to grow */
+    flex-grow: 1;
 }
 
-.calculator-inputs-output {
-    flex: 1;
-    min-width: 250px; /* Reduced min-width */
-     animation: fade-in var(--animation-duration-medium) ease-out forwards;
+/* --- Top section for Output and Visual (Side-by-Side) --- */
+.output-visual-top {
+    display: flex;
+    flex-direction: row; /* Side by side within this section */
+    gap: 20px; /* Gap between output and visual */
+    align-items: flex-start; /* Align items to the top */
+    padding-bottom: 20px; /* Add some space below this section */
+    border-bottom: 1px solid var(--border-color); /* Add a separator */
+}
+
+
+.output-section {
+    flex: 1; /* Output section takes available space */
+    text-align: center;
+    min-height: 70px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity var(--animation-duration-medium) ease-out, transform var(--animation-duration-medium) ease-out;
+    color: var(--text-color-dark);
+     z-index: 1;
+    position: relative;
+     padding-top: 0; /* Remove top padding */
+     margin-top: 0; /* Remove top margin */
+     border-top: none; /* Remove top border */
+}
+
+.output-section.visible {
+     opacity: 1;
+     transform: translateY(0);
+}
+
+.output-section .placeholder {
+    color: var(--text-color-light);
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+.output-section .result-number {
+    font-size: 3em;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin: 8px 0;
+    display: block;
+    animation: pulse-scale var(--animation-duration-medium) ease-out forwards;
+}
+
+@keyframes pulse-scale {
+    0% { transform: scale(0.95); opacity: 0.7; }
+    70% { transform: scale(1.02); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+.output-section p {
+    animation: fade-in var(--animation-duration-medium) ease-out forwards;
+    font-size: 1.1em;
 }
 
 .visual-representation {
-    flex: 0 0 120px; /* Reduced fixed width for visual column */
+    flex: 0 0 120px; /* Fixed width for the visual column */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    padding-bottom: 10px; /* Reduced padding */
-     animation: fade-in var(--animation-duration-medium) ease-out forwards;
-     animation-delay: 0.2s;
+    padding-bottom: 0; /* Remove bottom padding */
+     z-index: 1;
+    position: relative;
 }
 
-@keyframes fade-in {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+
+/* --- Calculator Inputs Section --- */
+.calculator-inputs-output { /* This now only contains inputs */
+    flex: 1; /* Allow this section to grow */
+    min-width: 250px;
+     animation: fade-in var(--animation-duration-medium) ease-out forwards;
+      padding-top: 20px; /* Add padding at the top */
 }
 
 
 .input-group {
-    margin-bottom: 15px; /* Reduced margin */
+    margin-bottom: 15px;
     text-align: left;
     opacity: 0;
     transform: translateY(10px);
@@ -180,19 +235,19 @@ body {
 
 .input-group label {
     display: block;
-    margin-bottom: 5px; /* Reduced margin */
+    margin-bottom: 5px;
     font-weight: bold;
     color: var(--text-color-dark);
-    font-size: 0.9em; /* Slightly reduced font size */
+    font-size: 0.9em;
 }
 
 .input-group input[type="number"],
 .input-group input[type="text"] {
     width: 100%;
-    padding: 10px 12px; /* Reduced padding */
+    padding: 10px 12px;
     border: 1px solid var(--border-color);
-    border-radius: 6px; /* Slightly less rounded */
-    font-size: 1em; /* Slightly reduced font size */
+    border-radius: 6px;
+    font-size: 1em;
     transition: border-color var(--animation-duration-fast) ease-in-out, box-shadow var(--animation-duration-fast) ease-in-out;
     box-sizing: border-box;
     background-color: #f9f9f9;
@@ -200,86 +255,41 @@ body {
 }
 
 .input-group input[type="number"]:focus,
-.input-group input[type="text"]:focus {
+.input-group input[type="text"]::placeholder:focus { /* Corrected focus selector for placeholder */
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 8px var(--focus-glow); /* Slightly reduced glow */
+    box-shadow: 0 0 8px var(--focus-glow);
     background-color: var(--card-background);
 }
 
 ::placeholder {
   color: var(--text-color-light);
   opacity: 1;
-  font-size: 0.9em; /* Slightly reduced placeholder font size */
+  font-size: 0.9em;
 }
 
-
-.output-section {
-    margin-top: 20px; /* Reduced margin */
-    padding-top: 20px; /* Reduced padding */
-    border-top: 1px solid var(--border-color);
-    text-align: center;
-    min-height: 70px; /* Reduced min height */
-    opacity: 0;
-    transform: translateY(10px); /* Reduced initial translation */
-    transition: opacity var(--animation-duration-medium) ease-out, transform var(--animation-duration-medium) ease-out; /* Adjusted transition */
-    color: var(--text-color-dark);
-     z-index: 1;
-    position: relative;
-}
-
-.output-section.visible {
-     opacity: 1;
-     transform: translateY(0);
-}
-
-.output-section .placeholder {
-    color: var(--text-color-light);
-    font-style: italic;
-    font-size: 0.9em; /* Reduced font size */
-}
-
-.output-section .result-number {
-    font-size: 3em; /* Reduced font size */
-    font-weight: 700;
-    color: var(--accent-color);
-    margin: 8px 0; /* Reduced margin */
-    display: block;
-    animation: pulse-scale var(--animation-duration-medium) ease-out forwards;
-}
-
-@keyframes pulse-scale {
-    0% { transform: scale(0.95); opacity: 0.7; } /* Adjusted pulse scale */
-    70% { transform: scale(1.02); opacity: 1; }
-    100% { transform: scale(1); }
-}
-
-.output-section p {
-    animation: fade-in var(--animation-duration-medium) ease-out forwards;
-    font-size: 1.1em; /* Slightly reduced font size */
-}
 
 /* --- Value Equivalent Fill Styling --- */
 .visual-label {
-    font-size: 0.85em; /* Reduced font size */
+    font-size: 0.85em;
     font-weight: bold;
     color: var(--text-color-dark);
-    margin-bottom: 8px; /* Reduced margin */
+    margin-bottom: 8px;
 }
 
 .visual-value-text {
-     font-size: 0.9em; /* Reduced font size */
+     font-size: 0.9em;
     color: var(--fill-value-text-color);
     font-weight: bold;
-     margin-bottom: 3px; /* Reduced margin */
-     min-height: 1.1em; /* Adjusted min height */
+     margin-bottom: 3px;
+     min-height: 1.1em;
 }
 
 .fill-container {
-    width: 70px; /* Reduced width */
-    height: 150px; /* Reduced height */
+    width: 70px;
+    height: 150px;
     border: 2px solid var(--border-color);
-    border-radius: 6px; /* Slightly less rounded */
+    border-radius: 6px;
     background-color: var(--fill-background);
     position: relative;
     overflow: hidden;
@@ -291,47 +301,47 @@ body {
     width: 100%;
     height: 0;
     background: linear-gradient(to top, var(--secondary-color), var(--accent-color));
-    transition: height var(--animation-duration-medium) ease-out; /* Adjusted transition */
+    transition: height var(--animation-duration-medium) ease-out;
 }
 /* --- End Value Equivalent Fill Styling --- */
 
 
 .button-container {
     text-align: center;
-    margin-top: 15px; /* Reduced margin */
-    padding-bottom: 20px; /* Reduced padding */
-    padding-left: 20px; /* Reduced padding */
-    padding-right: 20px; /* Reduced padding */
+    margin-top: 15px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
     z-index: 1;
     position: relative;
 }
 
 button {
-    padding: 10px 20px; /* Reduced padding */
-    font-size: 1em; /* Reduced font size */
+    padding: 10px 20px;
+    font-size: 1em;
     font-weight: bold;
     border: none;
-    border-radius: 6px; /* Slightly less rounded */
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color var(--animation-duration-fast) ease-in-out, box-shadow var(--animation-duration-fast) ease-in-out, transform var(--animation-duration-fast) ease-in-out;
     color: var(--button-text-color);
     background-color: var(--button-bg-color);
-    box-shadow: 0 3px 8px var(--shadow-color); /* Reduced shadow */
+    box-shadow: 0 3px 8px var(--shadow-color);
 }
 
 button:hover {
     background-color: var(--button-hover-bg);
-    box-shadow: 0 5px 10px var(--shadow-color); /* Reduced shadow */
+    box-shadow: 5px 10px var(--shadow-color); /* Adjusted shadow on hover */
 }
 
 button:active {
     transform: scale(0.98);
-    box-shadow: 0 1px 3px var(--shadow-color); /* Reduced shadow */
+    box-shadow: 1px 3px var(--shadow-color); /* Adjusted shadow on active */
 }
 
 .reset-button {
     background-color: var(--button-reset-bg);
-    margin-left: 0; /* Kept at 0 as there's only one button now */
+    margin-left: 0;
     color: var(--text-color-dark);
 }
 
@@ -345,22 +355,31 @@ button:active {
 
 
 .disclaimer {
-    font-size: 0.8em; /* Reduced font size */
+    font-size: 0.8em;
     color: var(--text-color-light);
-    margin-top: 20px; /* Reduced margin */
-    padding: 0 15px 15px 15px; /* Reduced padding */
+    margin-top: 20px;
+    padding: 0 15px 15px 15px;
 }
 
 /* Media Query for Responsiveness - Stack columns on smaller screens */
-@media (max-width: 700px) { /* Adjusted breakpoint slightly */
+@media (max-width: 700px) {
     .content-wrapper {
         flex-direction: column;
-        gap: 15px; /* Reduced gap */
-        padding: 0 15px 15px 15px; /* Reduced padding */
+        gap: 15px;
+        padding: 0 15px 15px 15px;
+    }
+
+     /* Stack output and visual vertically on smaller screens */
+    .output-visual-top {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center; /* Center items when stacked */
+        padding-bottom: 15px; /* Adjusted padding */
     }
 
     .calculator-inputs-output {
         min-width: auto;
+         padding-top: 15px; /* Adjusted padding */
     }
 
     .visual-representation {
@@ -371,8 +390,8 @@ button:active {
     }
 
     .fill-container {
-        height: 120px; /* Reduced height on smaller screens */
-        width: 60px; /* Adjusted width */
+        height: 120px;
+        width: 60px;
     }
 
      .visual-label {
@@ -390,7 +409,7 @@ button:active {
     .calculator-inputs-output .input-group:nth-child(4) { animation-delay: 0.4s; }
 }
 
-@media (max-width: 500px) { /* Added breakpoint for even smaller screens */
+@media (max-width: 500px) {
     .title {
         font-size: 1.6em;
     }
@@ -422,7 +441,7 @@ button:active {
         font-size: 0.75em;
     }
      .fill-container {
-        height: 100px; /* Further reduce height */
-        width: 50px; /* Further reduce width */
+        height: 100px;
+        width: 50px;
      }
 }
