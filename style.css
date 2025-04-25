@@ -1,0 +1,115 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6; /* Light background */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    text-align: center;
+    padding: 20px;
+    max-width: 500px;
+    width: 90%;
+}
+
+.title {
+    color: #007bff; /* Accent color */
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.calculator-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.input-group input[type="number"],
+.input-group input[type="text"] {
+    width: calc(100% - 22px); /* Adjust for padding and border */
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+.input-group input[type="number"]:focus,
+.input-group input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Glow effect on focus */
+}
+
+.output-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee; /* Separator */
+    text-align: center;
+    min-height: 60px; /* Give it some minimum height */
+    opacity: 0; /* Start hidden for animation */
+    transform: translateY(10px); /* Start slightly lower for animation */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Animation */
+}
+
+.output-section.visible {
+     opacity: 1;
+     transform: translateY(0);
+}
+
+
+.output-section .placeholder {
+    color: #777;
+    font-style: italic;
+}
+
+.output-section .result-number {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #28a745; /* Success color, can be adjusted */
+    margin: 10px 0;
+    display: block; /* Ensure it's on its own line */
+}
+
+.output-section .result-text {
+    font-size: 1.2em;
+    color: #555;
+}
+
+
+.disclaimer {
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 20px;
+}
+
+/* Optional: Add some simple hover effects */
+.input-group input[type="number"]:hover,
+.input-group input[type="text"]:hover {
+     border-color: #b0b0b0;
+}
