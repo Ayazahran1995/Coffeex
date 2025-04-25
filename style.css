@@ -135,9 +135,9 @@ body {
 /* --- Top section for Output and Visual (Side-by-Side) --- */
 .output-visual-top {
     display: flex;
-    flex-direction: row; /* Side by side within this section */
-    gap: 20px; /* Gap between output and visual */
-    align-items: center; /* Align items to the center vertically */
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
     padding-bottom: 20px;
     border-bottom: 1px solid var(--border-color);
 }
@@ -190,7 +190,7 @@ body {
 }
 
 .visual-representation {
-    flex: 0 0 250px; /* Increased fixed width for the horizontal visual column */
+    flex: 0 0 250px; /* Keep wider width for horizontal bar */
     display: flex;
     flex-direction: column; /* Stack label, text, and fill container vertically */
     align-items: flex-start; /* Align items to the start (left) */
@@ -200,32 +200,33 @@ body {
 }
 
 
-/* --- Value Equivalent Fill Styling (Horizontal) --- */
+/* --- Value Equivalent Fill Styling (Horizontal - Corrected) --- */
 .visual-label {
     font-size: 0.85em;
     font-weight: bold;
     color: var(--text-color-dark);
-    margin-bottom: 5px; /* Reduced margin */
+    margin-bottom: 5px;
 }
 
 .visual-value-text {
      font-size: 0.9em;
     color: var(--fill-value-text-color);
     font-weight: bold;
-     margin-bottom: 5px; /* Reduced margin */
+     margin-bottom: 5px; /* Ensure space below text */
      min-height: 1.1em;
 }
 
 .fill-container {
     width: 100%; /* Take full width of its parent (.visual-representation) */
-    height: 20px; /* Reduced height for horizontal bar */
+    height: 20px; /* Height of the horizontal bar */
     border: 2px solid var(--border-color);
     border-radius: 6px;
     background-color: var(--fill-background);
     position: relative;
     overflow: hidden;
-    display: flex; /* Use flex to position the fill bar */
-    align-items: center; /* Center the fill bar vertically */
+    display: flex; /* Use flex to position the fill bar within the container */
+    align-items: center; /* Vertically center the fill bar */
+     justify-content: flex-start; /* Ensure the fill bar starts from the left */
 }
 
 .fill-bar {
@@ -291,7 +292,7 @@ body {
 }
 
 .input-group input[type="number"]:focus,
-.input-group input[type="text"]:focus {
+.input-group input[type="text"]:focus { /* Corrected focus selector */
     outline: none;
     border-color: var(--accent-color);
     box-shadow: 0 0 8px var(--focus-glow);
@@ -383,14 +384,14 @@ button:active {
 
     .visual-representation {
         flex: none;
-        width: 100%;
+        width: 100%; /* Take full width when stacked */
         align-items: center; /* Center items when stacked vertically */
         padding-bottom: 0;
     }
 
     /* Adjust visual fill container for stacked layout */
     .fill-container {
-        width: 100%; /* Take full width when stacked */
+        width: 90%; /* Allow some padding */
         height: 20px; /* Keep height for horizontal bar */
     }
 
@@ -403,7 +404,7 @@ button:active {
         margin-bottom: 2px;
      }
 
-     /* Adjust input group animation delay for stacked layout */
+     /* Adjust input group animation delay for staggered effect */
      .calculator-inputs-output .input-group:nth-child(1) { animation-delay: 0.1s; }
     .calculator-inputs-output .input-group:nth-child(2) { animation-delay: 0.2s; }
     .calculator-inputs-output .input-group:nth-child(3) { animation-delay: 0.3s; }
@@ -441,13 +442,10 @@ button:active {
      .disclaimer {
         font-size: 0.75em;
     }
-     /* Fill container width is already 100% in the media query above */
      .visual-representation {
-         /* Ensure padding doesn't make it too wide on very small screens */
-        padding: 0 10px;
-        box-sizing: border-box;
+        padding: 0 5px; /* Further reduced padding */
      }
      .fill-container {
-         width: 100%; /* Ensure it takes full width minus padding */
+         width: 100%;
      }
 }
