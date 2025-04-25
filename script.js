@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const thingNameInput = document.getElementById('thingName'); // New input
+    const thingNameInput = document.getElementById('thingName');
     const thingCostInput = document.getElementById('thingCost');
     const itemCostInput = document.getElementById('itemCost');
     const itemNameInput = document.getElementById('itemName');
     const outputSection = document.getElementById('outputSection');
-    const resetButton = document.getElementById('resetButton'); // New button
+    const resetButton = document.getElementById('resetButton');
 
     // Function to update the item cost input placeholder
     function updateItemCostPlaceholder() {
@@ -14,40 +14,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to perform the calculation and update the output
     function updateCalculation() {
-        const thingName = thingNameInput.value.trim() || 'That Thing'; // Get thing name
+        const thingName = thingNameInput.value.trim() || 'That Thing';
         const thingCost = parseFloat(thingCostInput.value);
         const itemCost = parseFloat(itemCostInput.value);
         const itemName = itemNameInput.value.trim() || 'Everyday Item';
 
-        // Clear previous output and hide
-        outputSection.innerHTML = '';
+        // Clear previous output and hide with a slight delay for re-triggering animation
         outputSection.classList.remove('visible');
-
+        outputSection.innerHTML = ''; // Clear content immediately
 
         if (isNaN(thingCost) || isNaN(itemCost) || itemCost <= 0 || thingCost < 0) {
             // Display a placeholder or error message if inputs are invalid
              outputSection.innerHTML = '<p class="placeholder">Enter valid numbers for costs.</p>';
+             // Add a slight delay before making visible to allow CSS transition
              setTimeout(() => { outputSection.classList.add('visible'); }, 50);
             return;
         }
 
         const equivalentItems = (thingCost / itemCost).toFixed(1);
 
+        // --- Engaging Element: Dynamic Message Based on Result ---
+        let engagingMessage = '';
+        const numberOfItems = parseFloat(equivalentItems);
+
+        if (numberOfItems >= 100) {
+            engagingMessage = 'Wow, that\'s a lot!';
+        } else if (numberOfItems >= 50) {
+             engagingMessage = 'Quite a few!';
+        } else if (numberOfItems > 0 && numberOfItems < 1) {
+             engagingMessage = 'Less than one whole one!';
+        }
+
+
         // Create and add the output elements
         const resultText1 = document.createElement('p');
         resultText1.classList.add('result-text');
-        // Incorporate the thing name into the text
         resultText1.textContent = `Getting ${thingName} is equivalent to:`;
 
         const resultNumber = document.createElement('span');
         resultNumber.classList.add('result-number');
         resultNumber.textContent = equivalentItems;
 
+
          const resultText2 = document.createElement('p');
         resultText2.classList.add('result-text');
-        // Handle pluralization
         const itemText = `${itemName}${parseFloat(equivalentItems) !== 1 ? 's' : ''}`;
         resultText2.textContent = itemText;
+
+        // Add the engaging message if it exists
+        if (engagingMessage) {
+            const messageElement = document.createElement('p');
+            messageElement.classList.add('result-text', 'engaging-message'); // Add a class for potential styling
+            messageElement.textContent = engagingMessage;
+            outputSection.appendChild(messageElement); // Add message after the main result
+        }
 
 
         outputSection.appendChild(resultText1);
@@ -68,16 +88,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Reset placeholder and output
         updateItemCostPlaceholder();
-        outputSection.innerHTML = '<p class="placeholder">Enter details above to see the magic!</p>';
-        outputSection.classList.remove('visible'); // Hide output after reset
+        // Clear content first before adding placeholder
+        outputSection.classList.remove('visible');
+         outputSection.innerHTML = '<p class="placeholder">Enter details above to see the magic!</p>';
+
 
         // Optionally, recalculate after reset (will show placeholder)
-        updateCalculation();
+        // updateCalculation(); // Removed to keep placeholder visible after reset
     }
 
 
     // Add event listeners for real-time updates
-    thingNameInput.addEventListener('input', updateCalculation); // Listen to thing name changes
+    thingNameInput.addEventListener('input', updateCalculation);
     thingCostInput.addEventListener('input', updateCalculation);
     itemCostInput.addEventListener('input', updateCalculation);
     itemNameInput.addEventListener('input', () => {
@@ -91,5 +113,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial updates
     updateItemCostPlaceholder();
-    updateCalculation(); // Perform initial calculation (will show placeholder if inputs are empty)
+    // updateCalculation(); // Removed initial calculation to start with placeholder
 });
