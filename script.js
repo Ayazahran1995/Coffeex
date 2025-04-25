@@ -1,16 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const calculatorCard = document.querySelector('.calculator-card');
+    const calculatorCard = document.querySelector('.container.calculator-card'); // Use the correct selector
     const thingNameInput = document.getElementById('thingName');
     const thingCostInput = document.getElementById('thingCost');
     const itemCostInput = document.getElementById('itemCost');
     const itemNameInput = document.getElementById('itemName');
     const outputSection = document.getElementById('outputSection');
-    const equivalentStackContainer = document.getElementById('equivalentStackContainer'); // Get the stack container
     const resetButton = document.getElementById('resetButton');
+    const fillBar = document.getElementById('fillBar'); // Get the fill bar element
+    const visualValueText = document.getElementById('visualValueText'); // Get the text element above the fill bar
 
     const allInputs = [thingNameInput, thingCostInput, itemCostInput, itemNameInput];
 
-    const MAX_STACK_ITEMS = 50; // Define the maximum number of items to show in the visual stack
+     // Define a scale for the visual fill bar (e.g., 100 equivalent items = 100% fill)
+    const VISUAL_SCALE_MAX_ITEMS = 100; // Adjust this number based on expected values
 
     // Function to update the item cost input placeholder
     function updateItemCostPlaceholder() {
@@ -32,34 +34,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to build and display the equivalent stack
-    function displayEquivalentStack(numberOfItems, itemName) {
-        // Clear previous stack
-        equivalentStackContainer.innerHTML = '';
+    // Function to update the visual fill animation
+    function updateVisualFill(numberOfItems, itemName) {
+        // Calculate the fill percentage based on the defined scale
+        let fillPercentage = (numberOfItems / VISUAL_SCALE_MAX_ITEMS) * 100;
 
-        if (numberOfItems <= 0) {
-            return; // Don't display stack for zero or negative items
-        }
+        // Cap the fill at 100% visually, even if the number exceeds the scale max
+        fillPercentage = Math.min(fillPercentage, 100);
 
-        const itemsToDisplay = Math.min(numberOfItems, MAX_STACK_ITEMS);
-        const remainingItems = numberOfItems - itemsToDisplay;
+        // Set the height of the fill bar to trigger the CSS transition
+        fillBar.style.height = `${fillPercentage}%`;
 
-        // Create and append stack items
-        for (let i = 0; i < itemsToDisplay; i++) {
-            const stackItem = document.createElement('div');
-            stackItem.classList.add('stack-item');
-            // Add animation delay for staggered appearance
-            stackItem.style.animationDelay = `${i * 0.03}s`; // Adjust delay for desired effect
-            equivalentStackContainer.appendChild(stackItem);
-        }
-
-        // Add "plus more" text if there are remaining items
-        if (remainingItems > 0) {
-            const moreText = document.createElement('p');
-            moreText.classList.add('stack-more-text');
-            moreText.textContent = `+ ${remainingItems.toFixed(0)} more ${itemName}${remainingItems !== 1 ? 's' : ''}`;
-            equivalentStackContainer.appendChild(moreText);
-        }
+        // Update the text above the fill bar
+         if (numberOfItems > 0 && isAnyInputFilled()) {
+             visualValueText.textContent = `${numberOfItems.toFixed(1)} ${itemName}${parseFloat(numberOfItems.toFixed(1)) !== 1 ? 's' : ''}`;
+         } else {
+             visualValueText.textContent = ''; // Clear text if no valid calculation
+              fillBar.style.height = '0%'; // Reset fill bar
+         }
     }
 
 
@@ -70,10 +62,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const itemCost = parseFloat(itemCostInput.value);
         const itemName = itemNameInput.value.trim() || 'Everyday Item';
 
-        // Clear previous output and stack, hide with a slight delay
+        // Clear previous output and hide with a slight delay
         outputSection.classList.remove('visible');
         outputSection.innerHTML = '';
-        equivalentStackContainer.innerHTML = ''; // Clear the stack container
+
+        // --- Update Visual Fill Based on Inputs (even before full calculation is valid) ---
+        const potentialEquivalentItems = (thingCost / itemCost);
+         // Only update visual if at least cost inputs have numbers
+        if (!isNaN(thingCost) && !isNaN(itemCost) && itemCost > 0 && thingCost >= 0) {
+             updateVisualFill(potentialEquivalentItems, itemName);
+        } else {
+             updateVisualFill(0, itemName); // Reset visual if inputs are not valid numbers
+        }
+
 
         if (isNaN(thingCost) || isNaN(itemCost) || itemCost <= 0 || thingCost < 0 || !isAnyInputFilled()) {
              outputSection.innerHTML = '<p class="placeholder">Enter details above to see the magic!</p>';
@@ -81,11 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const equivalentItems = (thingCost / itemCost); // Calculate without toFixed initially for comparison
+        const equivalentItems = (thingCost / itemCost); // Use the non-fixed number for comparisons
+
 
         // --- Engaging Element: Dynamic Message Based on Result ---
         let engagingMessage = '';
-        const numberOfItems = equivalentItems; // Use the non-fixed number for comparisons
+        const numberOfItems = equivalentItems;
 
         if (numberOfItems >= 100) {
             engagingMessage = 'Wow, that\'s a lot!';
@@ -103,12 +105,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const resultNumber = document.createElement('span');
         resultNumber.classList.add('result-number');
-         resultNumber.textContent = equivalentItems.toFixed(1); // Display with one decimal
+         resultNumber.textContent = equivalentItems.toFixed(1);
 
 
          const resultText2 = document.createElement('p');
         resultText2.classList.add('result-text');
-        const itemText = `${itemName}${parseFloat(equivalentItems.toFixed(1)) !== 1 ? 's' : ''}`; // Pluralize based on displayed number
+        const itemText = `${itemName}${parseFloat(equivalentItems.toFixed(1)) !== 1 ? 's' : ''}`;
         resultText2.textContent = itemText;
 
 
@@ -123,9 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
         outputSection.appendChild(resultText1);
         outputSection.appendChild(resultNumber);
         outputSection.appendChild(resultText2);
-
-        // --- Display the Equivalent Stack ---
-        displayEquivalentStack(Math.floor(numberOfItems), itemName); // Pass the floor to stack whole items
 
 
         // Make output visible with animation
@@ -146,7 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateItemCostPlaceholder();
         outputSection.classList.remove('visible');
          outputSection.innerHTML = '<p class="placeholder">Enter details above to see the magic!</p>';
-         equivalentStackContainer.innerHTML = ''; // Clear the stack container on reset
+
+         // Reset the visual fill bar
+         updateVisualFill(0, ''); // Set to 0 and clear item name
     }
 
 
@@ -154,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     allInputs.forEach(input => {
         input.addEventListener('input', () => {
             updateCardActiveState();
-            updateItemCostPlaceholder(); // Only updates placeholder for itemCost
+            updateItemCostPlaceholder();
             updateCalculation();
         });
     });
@@ -167,4 +168,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial updates
     updateItemCostPlaceholder();
     updateCardActiveState();
+    updateVisualFill(0, ''); // Ensure visual is reset on load
 });
