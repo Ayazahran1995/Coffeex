@@ -12,7 +12,20 @@
         <h1 class="title">Relatable Math</h1>
         <p class="subtitle">See what that purchase is really worth in everyday items!</p>
 
-        <div class="content-wrapper"> <div class="calculator-inputs-output"> <div class="input-group">
+        <div class="content-wrapper">
+            <div class="output-visual-top"> <div class="output-section" id="outputSection">
+                    <p class="placeholder">Enter details above to see the magic!</p>
+                </div>
+
+                <div class="visual-representation" id="visualRepresentation"> <p class="visual-label" id="visualLabel">Equivalent Value</p>
+                    <div class="fill-container">
+                        <div class="fill-bar" id="fillBar"></div>
+                    </div>
+                     <p class="visual-value-text" id="visualValueText"></p>
+                </div>
+            </div>
+
+            <div class="calculator-inputs-output"> <div class="input-group">
                     <label for="thingName">What's the thing you want to buy?</label>
                     <input type="text" id="thingName" placeholder="e.g., New Headphones">
                 </div>
@@ -31,15 +44,7 @@
                     <label for="itemCost">Average Cost of One Item ($):</label>
                     <input type="number" id="itemCost" placeholder="e.g., 3.50" min="0">
                 </div>
-
-                <div class="output-section" id="outputSection">
-                    <p class="placeholder">Enter details above to see the magic!</p>
-                </div>
             </div>
-
-            <div class="visual-representation"> <p class="visual-label" id="visualLabel">Equivalent Value</p> <div class="fill-container">
-                    <div class="fill-bar" id="fillBar"></div> </div>
-                 <p class="visual-value-text" id="visualValueText"></p> </div>
         </div>
 
         <div class="button-container">
