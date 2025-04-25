@@ -27,9 +27,13 @@
     --glow-color-start: rgba(0, 188, 212, 0.4); /* Semi-transparent accent color */
     --glow-color-end: rgba(0, 188, 212, 0); /* Fully transparent accent color */
 
-    /* Stack item colors */
-    --stack-item-color: var(--secondary-color); /* Use vibrant purple for stack items */
-    --stack-item-border: rgba(255, 255, 255, 0.3); /* Subtle white border for stack items */
+    /* Fill animation colors */
+    --fill-color: var(--secondary-color); /* Use secondary color for the fill */
+    --fill-background: #eee; /* Light background for the empty part of the fill container */
+    --fill-value-text-color: var(--primary-color); /* Color for the text above the fill bar */
+
+     /* Visual scale - adjust based on typical expected values */
+    --max-equivalent-for-visual: 100; /* What number of items represents 100% fill */
 }
 
 body {
@@ -48,10 +52,10 @@ body {
     color: var(--text-color-dark);
 }
 
-.container.calculator-card { /* Applied calculator-card class here */
+.container.calculator-card {
     text-align: center;
     padding: 0;
-    max-width: 500px;
+    max-width: 800px; /* Increased max width for side-by-side */
     width: 100%;
     box-shadow: 0 15px 40px var(--shadow-color);
     border-radius: 15px;
@@ -64,15 +68,13 @@ body {
     transition: box-shadow var(--animation-duration-fast) ease-in-out;
 }
 
-/* Remove the old focus-within gradient border */
 .container.calculator-card:focus-within {
     border: none;
     background-image: none;
 }
 
-
 /* --- Glow Effect --- */
-.container.calculator-card::before { /* Applied calculator-card class here */
+.container.calculator-card::before {
     content: '';
     position: absolute;
     top: -10px;
@@ -87,7 +89,7 @@ body {
     pointer-events: none;
 }
 
-.container.calculator-card.active::before { /* Applied calculator-card class here */
+.container.calculator-card.active::before {
     animation: glow-pulse 1.5s infinite alternate ease-in-out;
      opacity: 1;
 }
@@ -95,7 +97,7 @@ body {
 @keyframes glow-pulse {
     0% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.03); opacity: 0.7; }
-    100% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1); }
 }
 /* --- End Glow Effect --- */
 
@@ -119,12 +121,40 @@ body {
     position: relative;
 }
 
-.calculator-content {
-    padding: 0 25px 25px 25px;
-    flex-grow: 1;
+/* --- Side-by-Side Layout --- */
+.content-wrapper {
+    display: flex;
+    flex-direction: row; /* Side by side on larger screens */
+    padding: 0 25px 25px 25px; /* Padding around the two columns */
+    gap: 30px; /* Space between the two columns */
      z-index: 1;
     position: relative;
 }
+
+.calculator-inputs-output {
+    flex: 1; /* Allow this section to grow */
+    min-width: 280px; /* Ensure minimum width */
+     /* Animation delay for the whole section */
+    animation: fade-in var(--animation-duration-medium) ease-out forwards;
+}
+
+.visual-representation {
+    flex: 0 0 150px; /* Fixed width for the visual column */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end; /* Align items to the bottom */
+    padding-bottom: 20px; /* Add some padding at the bottom */
+     /* Animation delay for the whole section */
+     animation: fade-in var(--animation-duration-medium) ease-out forwards;
+     animation-delay: 0.2s; /* Stagger animation */
+}
+
+@keyframes fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
 
 .input-group {
     margin-bottom: 20px;
@@ -136,10 +166,11 @@ body {
     position: relative;
 }
 
-.input-group:nth-child(1) { animation-delay: 0.1s; }
-.input-group:nth-child(2) { animation-delay: 0.2s; }
-.input-group:nth-child(3) { animation-delay: 0.3s; }
-.input-group:nth-child(4) { animation-delay: 0.4s; }
+/* Add animation delay for a staggered effect (adjust total number if more inputs added) */
+.calculator-inputs-output .input-group:nth-child(1) { animation-delay: 0.1s; }
+.calculator-inputs-output .input-group:nth-child(2) { animation-delay: 0.2s; }
+.calculator-inputs-output .input-group:nth-child(3) { animation-delay: 0.3s; }
+.calculator-inputs-output .input-group:nth-child(4) { animation-delay: 0.4s; }
 
 
 @keyframes fade-in-up {
@@ -227,54 +258,41 @@ body {
     animation: fade-in var(--animation-duration-medium) ease-out forwards;
 }
 
-@keyframes fade-in {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+/* --- Value Equivalent Fill Styling --- */
+.visual-label {
+    font-size: 0.95em;
+    font-weight: bold;
+    color: var(--text-color-dark);
+    margin-bottom: 10px;
 }
 
-/* --- Equivalent Stack Styling --- */
-.equivalent-stack-container {
-    display: flex;
-    flex-direction: column-reverse; /* Stack from bottom up */
-    align-items: center;
-    margin-top: 20px;
-    min-height: 50px; /* Give it some space */
-    max-height: 200px; /* Limit the visual stack height */
-    overflow: hidden; /* Hide items that exceed max height */
-    padding: 0 20px;
-    z-index: 1;
-    position: relative;
+.visual-value-text {
+     font-size: 1em;
+    color: var(--fill-value-text-color); /* Use primary color for this text */
+    font-weight: bold;
+     margin-bottom: 5px;
+     min-height: 1.2em; /* Reserve space to prevent layout shifts */
 }
 
-.stack-item {
-    width: 60px; /* Width of each block */
-    height: 15px; /* Height of each block */
-    background-color: var(--stack-item-color);
-    border: 1px solid var(--stack-item-border);
-    border-radius: 3px; /* Slightly rounded corners for blocks */
-    margin-bottom: 2px; /* Small space between blocks */
-    opacity: 0; /* Start hidden for animation */
-    transform: translateY(10px); /* Start slightly low */
-    animation: fade-in-up-stack var(--animation-duration-fast) ease-out forwards;
+.fill-container {
+    width: 80px; /* Width of the fill container */
+    height: 200px; /* Height of the fill container */
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--fill-background);
+    position: relative; /* Needed for absolute positioning of fill bar */
+    overflow: hidden; /* Hide the fill bar outside the container */
+    display: flex; /* Use flex to position the fill bar at the bottom */
+    align-items: flex-end; /* Align fill bar to the bottom */
 }
 
-/* Keyframe for stack item animation (similar to input, but perhaps faster) */
-@keyframes fade-in-up-stack {
-    0% { opacity: 0; transform: translateY(10px); }
-    100% { opacity: 1; transform: translateY(0); }
+.fill-bar {
+    width: 100%; /* Fill the width of the container */
+    height: 0; /* Start with zero height */
+    background: linear-gradient(to top, var(--secondary-color), var(--accent-color)); /* Gradient fill */
+    transition: height var(--animation-duration-slow) ease-out; /* Animate height change */
 }
-
-/* Style for the "plus more" text */
-.stack-more-text {
-    font-size: 1em;
-    color: var(--text-color-medium);
-    margin-top: 10px;
-    animation: fade-in var(--animation-duration-medium) ease-out forwards;
-     z-index: 1;
-    position: relative;
-}
-
-/* --- End Equivalent Stack Styling --- */
+/* --- End Value Equivalent Fill Styling --- */
 
 
 .button-container {
@@ -332,7 +350,38 @@ button:active {
     padding: 0 20px 20px 20px;
 }
 
-/* Media query for smaller screens */
+/* Media Query for Responsiveness - Stack columns on smaller screens */
+@media (max-width: 768px) { /* Adjust breakpoint as needed */
+    .content-wrapper {
+        flex-direction: column; /* Stack columns vertically */
+        gap: 20px; /* Adjust gap */
+        padding: 0 20px 20px 20px;
+    }
+
+    .calculator-inputs-output {
+        min-width: auto; /* Remove min-width constraint */
+    }
+
+    .visual-representation {
+        flex: none; /* Remove flex properties */
+        width: 100%; /* Take full width */
+        align-items: center; /* Center content */
+        padding-bottom: 0; /* Remove bottom padding */
+    }
+
+    .fill-container {
+        height: 150px; /* Adjust height on smaller screens */
+    }
+
+     /* Adjust input group animation delay for stacked layout */
+     .calculator-inputs-output .input-group:nth-child(1) { animation-delay: 0.1s; }
+    .calculator-inputs-output .input-group:nth-child(2) { animation-delay: 0.2s; }
+    .calculator-inputs-output .input-group:nth-child(3) { animation-delay: 0.3s; }
+    .calculator-inputs-output .input-group:nth-child(4) { animation-delay: 0.4s; }
+     /* Ensure animation delays are sequential for all input groups */
+}
+
+
 @media (max-width: 600px) {
     .title {
         font-size: 1.8em;
@@ -343,8 +392,8 @@ button:active {
         padding: 0 15px;
     }
 
-    .calculator-content {
-         padding: 0 15px 15px 15px;
+    .content-wrapper {
+         padding: 0 15px 15px 15px; /* Adjust padding */
     }
 
 
@@ -394,12 +443,7 @@ button:active {
         padding: 0 15px 15px 15px;
     }
 
-    .equivalent-stack-container {
-         max-height: 150px; /* Adjust max height on smaller screens */
-    }
-
-    .stack-item {
-        width: 50px; /* Adjust block size */
-        height: 12px;
-    }
+     .fill-container {
+        width: 60px; /* Adjust width on smaller screens */
+     }
 }
