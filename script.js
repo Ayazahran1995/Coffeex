@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const calculatorCard = document.querySelector('.calculator-card'); // Get the calculator card
     const thingNameInput = document.getElementById('thingName');
     const thingCostInput = document.getElementById('thingCost');
     const itemCostInput = document.getElementById('itemCost');
@@ -6,11 +7,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const outputSection = document.getElementById('outputSection');
     const resetButton = document.getElementById('resetButton');
 
+    const allInputs = [thingNameInput, thingCostInput, itemCostInput, itemNameInput]; // Group inputs
+
     // Function to update the item cost input placeholder
     function updateItemCostPlaceholder() {
         const itemName = itemNameInput.value.trim() || 'Item';
         itemCostInput.placeholder = `e.g., 3.50 (Cost of one ${itemName})`;
     }
+
+    // Function to check if any input has content
+    function isAnyInputFilled() {
+        return allInputs.some(input => input.value.trim() !== '');
+    }
+
+    // Function to update the calculator card's active state (for glow)
+    function updateCardActiveState() {
+        if (isAnyInputFilled()) {
+            calculatorCard.classList.add('active');
+        } else {
+            calculatorCard.classList.remove('active');
+        }
+    }
+
 
     // Function to perform the calculation and update the output
     function updateCalculation() {
@@ -23,10 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
         outputSection.classList.remove('visible');
         outputSection.innerHTML = ''; // Clear content immediately
 
-        if (isNaN(thingCost) || isNaN(itemCost) || itemCost <= 0 || thingCost < 0) {
-            // Display a placeholder or error message if inputs are invalid
-             outputSection.innerHTML = '<p class="placeholder">Enter valid numbers for costs.</p>';
-             // Add a slight delay before making visible to allow CSS transition
+        if (isNaN(thingCost) || isNaN(itemCost) || itemCost <= 0 || thingCost < 0 || !isAnyInputFilled()) {
+            // Display a placeholder if inputs are invalid or none are filled
+             outputSection.innerHTML = '<p class="placeholder">Enter details above to see the magic!</p>';
              setTimeout(() => { outputSection.classList.add('visible'); }, 50);
             return;
         }
@@ -55,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
         resultNumber.classList.add('result-number');
         resultNumber.textContent = equivalentItems;
 
-
          const resultText2 = document.createElement('p');
         resultText2.classList.add('result-text');
         const itemText = `${itemName}${parseFloat(equivalentItems) !== 1 ? 's' : ''}`;
@@ -64,11 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add the engaging message if it exists
         if (engagingMessage) {
             const messageElement = document.createElement('p');
-            messageElement.classList.add('result-text', 'engaging-message'); // Add a class for potential styling
+            messageElement.classList.add('result-text', 'engaging-message');
             messageElement.textContent = engagingMessage;
-            outputSection.appendChild(messageElement); // Add message after the main result
+            outputSection.appendChild(messageElement);
         }
-
 
         outputSection.appendChild(resultText1);
         outputSection.appendChild(resultNumber);
@@ -86,26 +101,25 @@ document.addEventListener('DOMContentLoaded', () => {
         itemCostInput.value = '';
         itemNameInput.value = '';
 
+        // Update card active state after resetting inputs
+        updateCardActiveState();
+
         // Reset placeholder and output
         updateItemCostPlaceholder();
-        // Clear content first before adding placeholder
         outputSection.classList.remove('visible');
          outputSection.innerHTML = '<p class="placeholder">Enter details above to see the magic!</p>';
-
-
-        // Optionally, recalculate after reset (will show placeholder)
-        // updateCalculation(); // Removed to keep placeholder visible after reset
     }
 
 
     // Add event listeners for real-time updates
-    thingNameInput.addEventListener('input', updateCalculation);
-    thingCostInput.addEventListener('input', updateCalculation);
-    itemCostInput.addEventListener('input', updateCalculation);
-    itemNameInput.addEventListener('input', () => {
-        updateItemCostPlaceholder();
-        updateCalculation();
+    allInputs.forEach(input => {
+        input.addEventListener('input', () => {
+            updateCardActiveState(); // Update card state on any input
+            updateItemCostPlaceholder(); // Only needed for itemCost input, but safe here
+            updateCalculation();
+        });
     });
+
 
     // Add event listener for the reset button
     resetButton.addEventListener('click', resetCalculator);
@@ -113,5 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial updates
     updateItemCostPlaceholder();
-    // updateCalculation(); // Removed initial calculation to start with placeholder
+    updateCardActiveState(); // Set initial card state based on empty inputs
+    // updateCalculation(); // Start with placeholder, calculation runs on input
 });
