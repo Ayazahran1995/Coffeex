@@ -447,3 +447,8 @@ button:active {
         width: 60px; /* Adjust width on smaller screens */
      }
 }
+
+     .fill-container {
+        width: 60px; /* Adjust width on smaller screens */
+     }
+}
