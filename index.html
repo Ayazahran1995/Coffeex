@@ -47,7 +47,24 @@
             This is a fun way to visualize costs and potential trade-offs. It's about making informed choices that are right for you and does not promote overconsumption of any item.
         </p>
     </div>
-
+    <!-- After your existing input groups, add: -->
+<div class="comparison-section">
+    <h3>Compare with multiple items</h3>
+    <div id="comparisonItems">
+        <!-- Dynamic comparison items will be added here -->
+        <div class="comparison-item">
+            <div class="input-group">
+                <label for="compareItemName1">Comparison Item 1:</label>
+                <input type="text" id="compareItemName1" placeholder="e.g., Coffee">
+            </div>
+            <div class="input-group">
+                <label for="compareItemCost1">Cost ($):</label>
+                <input type="number" id="compareItemCost1" placeholder="e.g., 4.50" min="0">
+            </div>
+        </div>
+    </div>
+    <button id="addComparisonButton" class="add-button">+ Add Another Comparison</button>
+</div>
     <script src="script.js"></script>
 </body>
 </html>
