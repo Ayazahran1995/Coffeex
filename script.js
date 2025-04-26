@@ -170,3 +170,177 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCardActiveState();
     // Removed initial call to updateVisualFill
 });
+document.addEventListener('DOMContentLoaded', () => {
+    // Keep your existing code and add the following
+    
+    const addComparisonButton = document.getElementById('addComparisonButton');
+    const comparisonItemsContainer = document.getElementById('comparisonItems');
+    let comparisonCount = 1;
+    
+    // Function to add a new comparison item
+    function addComparisonItem() {
+        comparisonCount++;
+        const newItem = document.createElement('div');
+        newItem.classList.add('comparison-item');
+        newItem.innerHTML = `
+            <div class="input-group">
+                <label for="compareItemName${comparisonCount}">Comparison Item ${comparisonCount}:</label>
+                <input type="text" id="compareItemName${comparisonCount}" placeholder="e.g., Bus Ticket">
+            </div>
+            <div class="input-group">
+                <label for="compareItemCost${comparisonCount}">Cost ($):</label>
+                <input type="number" id="compareItemCost${comparisonCount}" placeholder="e.g., 2.50" min="0">
+            </div>
+            <button class="remove-button">×</button>
+        `;
+        
+        comparisonItemsContainer.appendChild(newItem);
+        
+        // Add event listener to the remove button
+        const removeButton = newItem.querySelector('.remove-button');
+        removeButton.addEventListener('click', () => {
+            comparisonItemsContainer.removeChild(newItem);
+            updateCalculation();
+        });
+        
+        // Add event listeners to new inputs
+        const newInputs = newItem.querySelectorAll('input');
+        newInputs.forEach(input => {
+            input.addEventListener('input', updateCalculation);
+        });
+    }
+    
+    // Add event listener to the add comparison button
+    addComparisonButton.addEventListener('click', addComparisonItem);
+    
+    // Modify the updateCalculation function to handle multiple comparisons
+    function updateCalculation() {
+        const thingName = thingNameInput.value.trim() || 'That Thing';
+        const thingCost = parseFloat(thingCostInput.value);
+        
+        // Clear previous output and hide with a slight delay
+        outputSection.classList.remove('visible');
+        outputSection.innerHTML = '';
+        
+        if (isNaN(thingCost) || thingCost < 0 || !isAnyInputFilled()) {
+            outputSection.innerHTML = '<p class="placeholder">Enter details above to see the magic!</p>';
+            setTimeout(() => { outputSection.classList.add('visible'); }, 50);
+            return;
+        }
+        
+        // Add the main result text
+        const resultText1 = document.createElement('p');
+        resultText1.classList.add('result-text');
+        resultText1.textContent = `${thingName} ($${thingCost.toFixed(2)}) is equivalent to:`;
+        outputSection.appendChild(resultText1);
+        
+        // Create comparison results container
+        const comparisonResults = document.createElement('div');
+        comparisonResults.classList.add('comparison-results');
+        
+        // Process the primary comparison (if filled)
+        const itemName = itemNameInput.value.trim();
+        const itemCost = parseFloat(itemCostInput.value);
+        
+        if (itemName && !isNaN(itemCost) && itemCost > 0) {
+            const equivalentItems = thingCost / itemCost;
+            const resultCard = createComparisonCard(itemName, equivalentItems);
+            comparisonResults.appendChild(resultCard);
+        }
+        
+        // Process additional comparisons
+        const comparisonItems = document.querySelectorAll('.comparison-item');
+        comparisonItems.forEach((item, index) => {
+            if (index === 0 && comparisonCount === 1) return; // Skip the template item if it's the only one
+            
+            const nameInput = item.querySelector('input[type="text"]');
+            const costInput = item.querySelector('input[type="number"]');
+            
+            if (nameInput && costInput) {
+                const name = nameInput.value.trim();
+                const cost = parseFloat(costInput.value);
+                
+                if (name && !isNaN(cost) && cost > 0) {
+                    const equivalentItems = thingCost / cost;
+                    const resultCard = createComparisonCard(name, equivalentItems);
+                    comparisonResults.appendChild(resultCard);
+                }
+            }
+        });
+        
+        // Add comparison results to output section
+        if (comparisonResults.children.length > 0) {
+            outputSection.appendChild(comparisonResults);
+        } else {
+            const placeholder = document.createElement('p');
+            placeholder.classList.add('placeholder');
+            placeholder.textContent = 'Add comparison items to see equivalents';
+            outputSection.appendChild(placeholder);
+        }
+        
+        // Make output visible with animation
+        setTimeout(() => {
+            outputSection.classList.add('visible');
+        }, 50);
+    }
+    
+    // Helper function to create comparison result cards
+    function createComparisonCard(itemName, count) {
+        const card = document.createElement('div');
+        card.classList.add('comparison-result-card');
+        
+        const nameElement = document.createElement('div');
+        nameElement.classList.add('item-name');
+        nameElement.textContent = itemName;
+        
+        const countElement = document.createElement('div');
+        countElement.classList.add('item-count');
+        countElement.textContent = count.toFixed(1);
+        
+        const unitText = document.createElement('div');
+        unitText.textContent = parseFloat(count.toFixed(1)) !== 1 ? `${itemName}s` : itemName;
+        
+        card.appendChild(nameElement);
+        card.appendChild(countElement);
+        card.appendChild(unitText);
+        
+        return card;
+    }
+    
+    // Add the first comparison item's inputs to the allInputs array
+    const firstComparisonInputs = document.querySelectorAll('#comparisonItems .comparison-item:first-child input');
+    firstComparisonInputs.forEach(input => {
+        allInputs.push(input);
+        input.addEventListener('input', updateCalculation);
+    });
+});
+function resetCalculator() {
+    thingNameInput.value = '';
+    thingCostInput.value = '';
+    itemNameInput.value = '';
+    itemCostInput.value = '';
+    
+    // Reset comparison items
+    const comparisonItems = document.querySelectorAll('.comparison-item');
+    comparisonItems.forEach((item, index) => {
+        // Keep the first item but clear its values
+        if (index === 0) {
+            const inputs = item.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+        } else {
+            // Remove additional items
+            comparisonItemsContainer.removeChild(item);
+        }
+    });
+    comparisonCount = 1;
+    
+    // Update card active state after resetting inputs
+    updateCardActiveState();
+    
+    // Reset placeholder and output
+    updateItemCostPlaceholder();
+    outputSection.classList.remove('visible');
+    outputSection.innerHTML = '<p class="placeholder">Enter details above to see the magic!</p>';
+}
