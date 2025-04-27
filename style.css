@@ -28,11 +28,23 @@
     --glow-color-end: rgba(0, 188, 212, 0);
 
     /* Value Box styling */
-    --value-box-background: var(--background-color); /* Use background color for box background */
-    --value-box-border: 2px solid var(--accent-color); /* Accent color border */
-    --value-box-text-color: var(--primary-color); /* Deep purple text color */
-    --value-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+    --value-box-background: var(--card-background);
+    --value-box-border: 2px solid var(--accent-color);
+    --value-box-text-color: var(--primary-color);
+    --value-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 
+    /* --- Comparison Section Colors (Using Accent Color) --- */
+    --comparison-card-background: white; /* Keep cards white or very light */
+    --comparison-card-border-color: var(--accent-color); /* Cyan border for cards */
+    --comparison-value-color: var(--accent-color); /* Cyan for the main numbers */
+    --comparison-name-color: var(--primary-color); /* Deep Purple for item names */
+    --comparison-unit-color: var(--text-color-medium); /* Medium grey for units */
+    --comparison-icon-color: var(--accent-color); /* Cyan for icons */
+    --comparison-title-color: var(--primary-color); /* Deep Purple for the title */
+    --comparison-insight-text: var(--text-color-light); /* Light grey for insight message */
+    --comparison-item-background: #f9f9f9; /* Light grey for input items */
+    --comparison-remove-button-color: var(--text-color-light); /* Light grey for remove button */
+    --comparison-remove-button-hover: var(--primary-color); /* Deep Purple on hover */
 }
 
 body {
@@ -54,7 +66,7 @@ body {
 .container.calculator-card {
     text-align: center;
     padding: 0;
-    max-width: 500px; /* Reverted max width as side-by-side visual is gone */
+    max-width: 500px;
     width: 100%;
     box-shadow: 0 10px 30px var(--shadow-color);
     border-radius: 10px;
@@ -134,7 +146,7 @@ body {
 /* --- Output Section with Value Box --- */
 .output-section {
     text-align: center;
-    min-height: 120px; /* Increased min height to accommodate value box */
+    min-height: 120px;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity var(--animation-duration-medium) ease-out, transform var(--animation-duration-medium) ease-out;
@@ -144,10 +156,10 @@ body {
      padding-top: 0;
      margin-top: 0;
      border-top: none;
-     display: flex; /* Use flexbox to arrange elements inside output */
+     display: flex;
      flex-direction: column;
      align-items: center;
-     justify-content: center; /* Center content vertically */
+     justify-content: center;
 }
 
 .output-section.visible {
@@ -166,37 +178,42 @@ body {
     background-color: var(--value-box-background);
     border: var(--value-box-border);
     border-radius: 8px;
-    padding: 15px 25px; /* Padding inside the box */
-    margin-bottom: 10px; /* Space below the box */
+    padding: 15px 25px;
+    margin-bottom: 10px;
     box-shadow: var(--value-box-shadow);
-    display: inline-block; /* Allow box to size based on content */
+    display: inline-block;
 }
 
 .output-section .result-number {
-    font-size: 3em; /* Reduced font size to fit in box better */
+    font-size: 3em;
     font-weight: 700;
-    color: var(--value-box-text-color); /* Use value box text color */
-    margin: 0; /* Remove margin to control spacing with padding */
+    color: var(--value-box-text-color);
+    margin: 0;
     display: block;
-    /* Removed pulse-scale animation from here, will handle number animation in JS */
 }
 
 .output-section .result-text {
     animation: fade-in var(--animation-duration-medium) ease-out forwards;
     font-size: 1.1em;
-    margin-bottom: 5px; /* Space below the main result text */
+    margin-bottom: 5px;
 }
+.output-section .item-unit.main-unit { /* Style for the unit text below the main value box */
+    font-size: 0.9em;
+    color: var(--text-color-medium);
+    margin-bottom: 15px; /* Space below main unit */
+}
+
 
 /* Style for the engaging message */
 .output-section .engaging-message {
-    font-size: 0.9em; /* Smaller for engaging message */
+    font-size: 0.9em;
     color: var(--text-color-medium);
     margin-top: 5px;
 }
 
 
 /* --- Calculator Inputs Section --- */
-.calculator-inputs { /* Class name changed */
+.calculator-inputs {
     flex: 1;
     min-width: 250px;
      animation: fade-in var(--animation-duration-medium) ease-out forwards;
@@ -263,79 +280,248 @@ body {
 }
 
 
-.button-container {
-    text-align: center;
-    margin-top: 15px;
-    padding-bottom: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-    z-index: 1;
-    position: relative;
+/* --- Comparison Section Styling --- */
+.comparison-section {
+    margin-top: 20px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+    display: none;
+     animation: fade-in var(--animation-duration-medium) ease-out forwards;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 1em;
-    font-weight: bold;
+.comparison-section.visible {
+    display: block;
+}
+
+.comparison-section h3 {
+    color: var(--comparison-title-color); /* Use comparison title color */
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.supportive-text {
+    color: var(--comparison-insight-text); /* Use comparison insight text color */
+    font-size: 0.85em;
+    margin-bottom: 15px;
+    font-style: italic;
+    text-align: left;
+}
+
+.comparison-controls {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.add-button {
+    background-color: var(--accent-color);
+    color: var(--text-color-dark);
+    font-size: 0.9em;
+    padding: 8px 15px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color var(--animation-duration-fast) ease-in-out, box-shadow var(--animation-duration-fast) ease-in-out, transform var(--animation-duration-fast) ease-in-out;
-    color: var(--button-text-color);
-    background-color: var(--button-bg-color);
-    box-shadow: 0 3px 8px var(--shadow-color);
+     transition: background-color var(--animation-duration-fast) ease-in-out, box-shadow var(--animation-duration-fast) ease-in-out, transform var(--animation-duration-fast) ease-in-out;
+     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-button:hover {
-    background-color: var(--button-hover-bg);
-    box-shadow: 0 5px 10px var(--shadow-color);
-}
-
-button:active {
-    transform: scale(0.98);
-    box-shadow: 0 1px 3px var(--shadow-color);
-}
-
-.reset-button {
-    background-color: var(--button-reset-bg);
-    margin-left: 0;
-    color: var(--text-color-dark);
-}
-
-.reset-button:hover {
+.add-button:hover {
     background-color: var(--button-reset-hover-bg);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+.add-button:active {
+     transform: scale(0.98);
+     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.reset-button:active {
-    background-color: #008c9e;
+
+#comparisonItemsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.comparison-item-group {
+    display: flex;
+    gap: 10px;
+    background-color: var(--comparison-item-background); /* Use comparison item background color */
+    padding: 15px;
+    border-radius: 8px;
+    position: relative;
+     animation: fade-in-up var(--animation-duration-medium) ease-out forwards;
+}
+
+.comparison-item-group .input-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+.comparison-item-group .input-group label {
+    font-size: 0.85em;
+}
+.comparison-item-group .input-group input[type="text"],
+.comparison-item-group .input-group input[type="number"] {
+    padding: 8px 10px;
+    font-size: 0.95em;
 }
 
 
-.disclaimer {
-    font-size: 0.8em;
-    color: var(--text-color-light);
+.comparison-item-group .remove-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    color: var(--comparison-remove-button-color); /* Use comparison remove button color */
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 0 5px;
+    box-shadow: none;
+    transition: color var(--animation-duration-fast) ease-in-out;
+}
+
+.comparison-item-group .remove-button:hover {
+    color: var(--comparison-remove-button-hover); /* Use comparison remove button hover color */
+    background: none;
+    box-shadow: none;
+}
+
+.comparison-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
     margin-top: 20px;
-    padding: 0 15px 15px 15px;
 }
 
-/* Media Query for smaller screens */
-@media (max-width: 700px) {
-    /* Removed media query rule that set flex-direction: column on output-visual-top */
-    /* as output-visual-top is removed */
+.comparison-card {
+    background-color: var(--comparison-card-background); /* Use comparison card background color */
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    border: 1px solid var(--comparison-card-border-color); /* Use comparison card border color */
+}
 
+.comparison-card:hover {
+    transform: translateY(-3px);
+}
+
+.comparison-card .item-icon {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: var(--comparison-icon-color); /* Use comparison icon color */
+}
+
+.comparison-card .item-name {
+    font-weight: bold;
+    color: var(--comparison-name-color); /* Use comparison name color */
+    margin-bottom: 5px;
+    font-size: 1em;
+}
+
+.comparison-card .item-value {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: var(--comparison-value-color); /* Use comparison value color (Cyan) */
+    margin: 8px 0;
+}
+
+.comparison-card .item-unit {
+     font-size: 0.9em;
+    color: var(--comparison-unit-color); /* Use comparison unit color */
+}
+
+
+.insight-message {
+    text-align: center;
+    font-style: italic;
+    color: var(--comparison-insight-text); /* Use comparison insight text color */
+    margin-top: 20px;
+    font-size: 0.9em;
+    padding: 0 20px;
+}
+
+/* Style for the "Add items below to compare!" placeholder */
+.comparison-results .placeholder.no-comparisons {
+     color: var(--text-color-light);
+    font-style: italic;
+    font-size: 1em;
+    text-align: center;
+    width: 100%;
+    grid-column: 1 / -1;
+}
+
+
+/* --- Media Queries --- */
+
+/* Adjust layout for smaller screens */
+@media (max-width: 700px) {
     .content-wrapper {
         gap: 15px;
         padding: 0 15px 15px 15px;
     }
 
-     .calculator-inputs { /* Class name changed */
+     .calculator-inputs {
         min-width: auto;
          padding-top: 15px;
     }
 
     .output-section {
-        min-height: 100px; /* Adjust min height */
+        min-height: 100px;
     }
+     .output-section .item-unit.main-unit { /* Adjust margin for main unit on small screens */
+         margin-bottom: 10px;
+     }
+
+
+    /* Stack input groups within comparison item on smaller screens */
+    .comparison-item-group {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .comparison-item-group .input-group {
+        flex: none;
+        width: 100%;
+    }
+     .comparison-item-group .input-group label {
+        font-size: 0.8em;
+     }
+     .comparison-item-group .input-group input[type="text"],
+     .comparison-item-group .input-group input[type="number"] {
+        padding: 8px 10px;
+        font-size: 0.95em;
+     }
+
+
+    /* Adjust grid for comparison result cards on smaller screens */
+    .comparison-results {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+    }
+
+     .comparison-card {
+         padding: 10px;
+         border: 1px solid var(--comparison-card-border-color); /* Ensure border is consistent */
+     }
+     .comparison-card .item-icon {
+         font-size: 1.8em;
+         margin-bottom: 8px;
+     }
+     .comparison-card .item-name {
+        font-size: 0.9em;
+        margin-bottom: 3px;
+     }
+     .comparison-card .item-value {
+        font-size: 1.4em;
+        margin: 5px 0;
+     }
+      .comparison-card .item-unit {
+         font-size: 0.8em;
+     }
+
 
     /* Adjust input group animation delay for stacked layout */
      .calculator-inputs .input-group:nth-child(1) { animation-delay: 0.1s; }
@@ -343,116 +529,78 @@ button:active {
     .calculator-inputs .input-group:nth-child(3) { animation-delay: 0.3s; }
     .calculator-inputs .input-group:nth-child(4) { animation-delay: 0.4s; }
 }
-.comparison-section {
-    margin-top: 20px;
-    border-top: 1px solid var(--border-color);
-    padding-top: 15px;
-}
 
-.comparison-section h3 {
-    color: var(--primary-color);
-    font-size: 1.1em;
-    margin-bottom: 15px;
-}
-
-.comparison-item {
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    margin-bottom: 10px;
-    position: relative;
-}
-
-.comparison-item .remove-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: none;
-    border: none;
-    color: var(--text-color-light);
-    cursor: pointer;
-    font-size: 1.2em;
-    padding: 0 5px;
-    box-shadow: none;
-}
-
-.comparison-item .remove-button:hover {
-    color: var(--primary-color);
-    background: none;
-    box-shadow: none;
-}
-
-.add-button {
-    background-color: var(--accent-color);
-    margin-top: 10px;
-    font-size: 0.9em;
-}
-
-.add-button:hover {
-    background-color: var(--button-reset-hover-bg);
-}
-
-.comparison-results {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 15px;
-}
-
-.comparison-result-card {
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    padding: 15px;
-    text-align: center;
-    min-width: 120px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    flex: 1;
-    max-width: 200px;
-}
-
-.comparison-result-card .item-name {
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-bottom: 8px;
-}
-
-.comparison-result-card .item-count {
-    font-size: 1.6em;
-    color: var(--text-color-dark);
-    font-weight: bold;
-    margin: 5px 0;
-}
-
+/* Further adjustments for very small screens */
 @media (max-width: 500px) {
     .title {
         font-size: 1.6em;
     }
     .subtitle {
         font-size: 0.9em;
+        padding: 0 10px;
+    }
+    .content-wrapper {
+        padding: 0 10px 10px 10px;
     }
      .input-group label {
-        font-size: 0.85em;
+        font-size: 0.8em;
     }
      .input-group input[type="number"],
     .input-group input[type="text"] {
-        padding: 8px 10px;
-        font-size: 0.9em;
-    }
-    ::placeholder {
+        padding: 6px 8px;
         font-size: 0.85em;
     }
-     .output-section .result-number {
-        font-size: 2.5em;
+    ::placeholder {
+        font-size: 0.8em;
     }
+     .output-section .result-number {
+        font-size: 2em;
+    }
+     .value-box {
+         padding: 10px 15px;
+         margin-bottom: 8px;
+     }
     .output-section .result-text {
-        font-size: 1.1em;
+        font-size: 1em;
     }
      button {
         padding: 8px 15px;
         font-size: 0.9em;
     }
+     .button-container {
+         padding-left: 10px;
+         padding-right: 10px;
+     }
      .disclaimer {
-        font-size: 0.75em;
+        font-size: 0.7em;
+        padding: 0 10px 10px 10px;
     }
+
+     /* Even smaller comparison cards on very small screens */
+    .comparison-results {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 8px;
+    }
+    .comparison-card {
+        padding: 8px;
+         border: 1px solid var(--comparison-card-border-color); /* Ensure border is consistent */
+    }
+     .comparison-card .item-icon {
+         font-size: 1.5em;
+         margin-bottom: 5px;
+     }
+      .comparison-card .item-name {
+        font-size: 0.85em;
+     }
+     .comparison-card .item-value {
+        font-size: 1.2em;
+     }
+      .comparison-card .item-unit {
+         font-size: 0.75em;
+     }
+
+     .insight-message {
+         font-size: 0.8em;
+         padding: 0 10px;
+     }
 }
