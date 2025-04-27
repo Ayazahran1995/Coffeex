@@ -17,7 +17,8 @@
                 <p class="placeholder">Enter details above to see the magic!</p>
                  </div>
 
-            <div class="calculator-inputs"> <div class="input-group">
+            <div class="calculator-inputs">
+                <div class="input-group">
                     <label for="thingName">What's the thing you want to buy?</label>
                     <input type="text" id="thingName" placeholder="e.g., New Headphones">
                 </div>
@@ -37,7 +38,27 @@
                     <input type="number" id="itemCost" placeholder="e.g., 3.50" min="0">
                 </div>
             </div>
-        </div>
+
+            <div class="comparison-section">
+                <h3>See multiple perspectives</h3>
+                <p class="supportive-text">Different contexts can offer different insights - all to help you make the choice that's right for you.</p>
+
+                <div id="comparisonItemsContainer">
+                    <div class="comparison-item-group input-group">
+                        <label for="compareItemName1">Comparison Item 1:</label>
+                        <input type="text" class="compare-item-name" data-id="1" placeholder="e.g., Coffee">
+
+                        <label for="compareItemCost1">Cost ($):</label>
+                        <input type="number" class="compare-item-cost" data-id="1" placeholder="e.g., 4.50" min="0">
+                    </div>
+                </div>
+
+                <button id="addComparisonButton" class="add-button">+ Add Another Comparison</button>
+
+                <div id="comparisonResults" class="comparison-results">
+                    </div>
+            </div>
+            </div>
 
         <div class="button-container">
             <button id="resetButton" class="reset-button">Reset</button>
@@ -47,24 +68,7 @@
             This is a fun way to visualize costs and potential trade-offs. It's about making informed choices that are right for you and does not promote overconsumption of any item.
         </p>
     </div>
-    <!-- After your existing input groups, add: -->
-<div class="comparison-section">
-    <h3>Compare with multiple items</h3>
-    <div id="comparisonItems">
-        <!-- Dynamic comparison items will be added here -->
-        <div class="comparison-item">
-            <div class="input-group">
-                <label for="compareItemName1">Comparison Item 1:</label>
-                <input type="text" id="compareItemName1" placeholder="e.g., Coffee">
-            </div>
-            <div class="input-group">
-                <label for="compareItemCost1">Cost ($):</label>
-                <input type="number" id="compareItemCost1" placeholder="e.g., 4.50" min="0">
-            </div>
-        </div>
-    </div>
-    <button id="addComparisonButton" class="add-button">+ Add Another Comparison</button>
-</div>
+
     <script src="script.js"></script>
 </body>
 </html>
