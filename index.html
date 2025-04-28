@@ -4,9 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatable Math Calculator</title>
+    <meta name="description" content="Visualise big purchases in terms of everyday items. Relatable Math Calculator - making large costs easier to understand.">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMJTVHWFJN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-FMJTVHWFJN');
+    </script>
 </head>
+
 <body>
     <div class="container calculator-card">
         <h1 class="title">Relatable Math</h1>
@@ -15,7 +26,7 @@
         <div class="content-wrapper">
             <div class="output-section" id="outputSection">
                 <p class="placeholder">Enter details above to see the magic!</p>
-                 </div>
+            </div>
 
             <div class="calculator-inputs">
                 <div class="input-group">
@@ -41,24 +52,23 @@
 
             <div class="comparison-section">
                 <h3>See multiple perspectives</h3>
-                <p class="supportive-text">Different contexts can offer different insights - all to help you make the choice that's right for you.</p>
+                <p class="supportive-text">Different contexts can offer different insights — all to help you make the choice that's right for you.</p>
 
                 <div id="comparisonItemsContainer">
                     <div class="comparison-item-group input-group">
                         <label for="compareItemName1">Comparison Item 1:</label>
                         <input type="text" class="compare-item-name" data-id="1" placeholder="e.g., Coffee">
 
-                        <label for="compareItemCost1">Cost ($):</label>
+                        <label for="compareItemCost1">Cost (£):</label>
                         <input type="number" class="compare-item-cost" data-id="1" placeholder="e.g., 4.50" min="0">
                     </div>
                 </div>
 
                 <button id="addComparisonButton" class="add-button">+ Add Another Comparison</button>
 
-                <div id="comparisonResults" class="comparison-results">
-                    </div>
+                <div id="comparisonResults" class="comparison-results"></div>
             </div>
-            </div>
+        </div>
 
         <div class="button-container">
             <button id="resetButton" class="reset-button">Reset</button>
